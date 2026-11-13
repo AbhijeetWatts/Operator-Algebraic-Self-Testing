@@ -1,0 +1,80 @@
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\subsection{Properties of Tensor Product Structures}
+\label{subsec:tensor_products_of_operator_systems_I}
+
+% Begin with the axioms for an operator-system tensor product.  Construct and
+% compare the minimal, maximal, commuting, and injective tensor products,
+% emphasizing their positive cones, functoriality, universal properties, and
+% behavior on C*-algebras.
+
+In light of the motivation above, we will begin with definition of a tensor product structure. 
+
+\begin{definition}{}{def: tensor product structure on alg tensor product of opsys}
+Let $S,T \in \UniOpSys$. A tensor product structure $\tau$ on $\tensor{\C}{S}{T}$ is a sequence $(C_n)_{n \in \N}$ of sets such that:
+\begin{enumerate}
+    \item $\forall n in \N: C_n \subseteq \Mat{n}{n}{\tensor{\C}{S}{T}}$,
+    \item $(\tensor{\C}{S}{T},(C_n)_{n \in \N},\tensor{}{1_S}{1_T}) \in \UniOpSys$,
+    \item $\forall p \in \Mat{k}{k}{S}^+: \forall q \in \Mat{l}{l}{T}^+: \tensor{}{p}{q} \in C_{kl}$.
+    \item If $\phi: S \to \Mat{k}{k}{\C}$ and $\psi: T \to \Mat{l}{l}{\C}$ are ucp maps, then $\tensor{\C}{\phi}{\psi}$ is ucp.
+\end{enumerate}
+We denote the operator system with this tensor product structure by $\tensor{\tau}{S}{T}$. 
+\end{definition}
+
+This definition raises a natural question. This was not asked during the actual seminar.
+
+\begin{Question}{}{que: can the definition above be modified to give a reasonable definition of tensor product of nonunital opsys}
+The definition above seems to make sense if we don't assume unitality in the right places. For example, in condition $(3)$, we may just work with cp maps rather than ucp ones. Does this generalization give an appropriate definition of a tensor product of non-unital operator systems?
+\end{Question}
+\begin{Answer}{}{ans: can the definition above be modified to give a reasonable definition of tensor product of nonunital opsys}
+
+\end{Answer}
+
+The following remark was made by Lucas, with an add-on by Adam.
+
+\begin{remark}{}{rem: condition two provides a kind of lower bound while condition three provides an upper bound}
+Lucas pointed out that the cones $C_n$ where $n$ is a prime are not easily determined by condition $(3)$ of \Cref{def: tensor product structure on alg tensor product of opsys}, in the sense that we don't have many explicit elements in them coming from elementary tensors. Hridoyananda proceeded to point out that condition $(2)$ ensures that these cones are controlled because they have to give rise to a unital operator system. Finally, Adam pointed out that condition $(3)$ of the definition should be thought of as a lower bound on the size of the cones (they must, at least, contain the elementary tensors coming from the cones on $S$ and $T$), while condition $(4)$ should be thought of as an upper bound on the size of the cones (they can't be too big, because some tensor product of ucp maps may not be ucp since matrix algebras have only so many positive elements). 
+\end{remark}
+
+There are, in principle, many tensor product structures that one can place on the algebraic tensor product of two operator systems. In this vein, the next few questions make sense to include here. These were asked, in one way or another, at the end of the lecture. 
+
+\begin{Question}{}{que: what are some permanence properties of tensor product structures}
+What are the permanence properties of tensor product structures? 
+\end{Question}
+\begin{Answer}{}{ans: what are some permanence properties of tensor product structures}
+
+\end{Answer}
+
+\begin{Question}{}{que: is there a general homological theory of tensor product structures}
+Is there a general homological theory of tensor product structures? That is, do we have general conditions under which these form exact functors, preserve pullbacks, commute with (co)limits or satisfy a hom-tensor adjunction?
+\end{Question}
+\begin{Answer}{}{ans: is there a general homological theory of tensor product structures}
+
+\end{Answer}
+
+\begin{Question}{}{que: is there a framework for understanding when a tensor product structure satisfies a universal property}
+Is there a framework for understanding when a tensor product structure satisfies a universal property? 
+\end{Question}
+\begin{Answer}{}{ans: is there a framework for understanding when a tensor product structure satisfies a universal property}
+
+\end{Answer}
+
+\begin{Question}{}{que: what do tensor products of operator systems mean physically and also in the commutative situation}
+What do tensor products of operator systems mean physically and also in the commutative situation?
+\end{Question}
+\begin{Answer}{}{ans: what do tensor products of operator systems mean physically and also in the commutative situation}
+
+\end{Answer}
+
+We have a remark about the questions above.
+
+\begin{remark}{}{rem: analogous questions can be asked for nonunital tensor product if its a thing}
+The questions above were phrased to fit \Cref{def: tensor product structure on alg tensor product of opsys} but once there is a definition for tensor products of non-unital operator systems, one can ask analogous questions in that case as well. One might possibly not expect the answer to be radically different and if that is not the case, then the reason for this should have to do with nice properties the unitization functor $U: \OpSys \to \UniOpSys$. 
+\end{remark}
+
+At this point, Hridoyananda talked about a partial order that one could place on tensor product structures. The definition simply has to do with a direct term-wise comparison of the cones of each tensor product structure but since it is not necessary for defining the tensor product structures we will discuss, we will not be concerned with it for the moment. We will, however, deal with it at the end of this subsection. With that said, we will simply construct the 4 main tensor product structures of concern. 
+
+
+\end{document}

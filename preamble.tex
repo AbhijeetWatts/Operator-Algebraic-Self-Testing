@@ -1,0 +1,2222 @@
+\documentclass[10pt, twoside]{article}
+
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage[normalem]{ulem}
+\usepackage{indentfirst}
+\usepackage{soul}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools} % Wraparound amsmath. For fancy math typesetting
+\usepackage[nointegrals]{wasysym} % nointegrals prevents wasysym from overwriting integral symbols from LaTeX and amsmath
+\usepackage{bbm} % For extended bold and blackboard bold characters
+\usepackage[italicdiff]{physics} % italicdiff causes derivatives to be rendered with italic d's instead of upright d's
+\usepackage[T1]{fontenc}
+%\usepackage{array}
+\setcounter{secnumdepth}{3}
+% \newcounter{commonbox}[section]
+% \counterwithin*{commonbox}{section}
+%\usepackage[condensed,math]{anttor}
+%\usepackage[condensed,math]{kurier}
+%\usepackage{aurical}
+\usepackage{xparse}
+\usepackage{xstring}
+% \usepackage{pifont} % For unusual symbols
+% \usepackage{mathdots} % For unusual combinations of dots
+\usepackage{wrapfig}
+\usepackage{lmodern,mathrsfs}
+\usepackage[inline,shortlabels]{enumitem}
+\setlist{topsep=2pt,itemsep=2pt,parsep=0pt,partopsep=0pt}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes} % Must be loaded AFTER inputenc
+%\usepackage{subfig}
+% \usepackage[a4paper,top=0.2in,bottom=0.2in,left=0.5in,right=0.5in,footskip=0.3in,includefoot]{geometry}
+\usepackage[a4paper, inner=0.5in, outer=0.5in, top=0.7in, bottom=0.7in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{fancyhdr,etoolbox}
+\pagestyle{fancy}
+\fancyfoot[C]{\thepage}
+\usepackage[most]{tcolorbox}
+
+% Faster `fuzzy shadow' (used by `drop fuzzy shadow' in the proposition and
+% corollary boxes). tcolorbox draws its 10 semi-transparent layers with TikZ
+% \path commands; here the very same layers (same rectangles, corner arcs,
+% colour and opacities) are drawn with pgf's basic layer, which is much faster.
+% Box shapes not covered below fall back to tcolorbox's own code.
+\makeatletter
+\def\ncg@fuzzylayer#1#2#3#4#5#6#7#8{% x-shift, y-shift, size change, opacity, SW, NW, NE, SE
+  \tcb@shadow@comp@ts{#3}{#1}%
+  \tcb@shadow@comp@arc%
+  \begin{pgfscope}%
+    \pgfsetfillopacity{#4}%
+    \tcb@boundary@base{#1+#3}{#2+#3}{\tcb@width+#1-#3}{\tcb@height+#2-#3}{#5}{#6}{#7}{#8}%
+    \pgfusepath{fill}%
+  \end{pgfscope}}
+\def\ncg@shadow@unbroken#1#2#3#4{\ncg@fuzzylayer{#1}{#2}{#3}{#4}%
+  {\tcb@arc@sha@SW}{\tcb@arc@sha@NW}{\tcb@arc@sha@NE}{\tcb@arc@sha@SE}}
+\def\ncg@shadow@first#1#2#3#4{\ncg@fuzzylayer{#1}{#2}{#3}{#4}%
+  {\tcb@arc@zpt}{\tcb@arc@sha@NW}{\tcb@arc@sha@NE}{\tcb@arc@zpt}}
+\def\ncg@shadow@middle#1#2#3#4{\ncg@fuzzylayer{#1}{#2}{#3}{#4}%
+  {\tcb@arc@zpt}{\tcb@arc@zpt}{\tcb@arc@zpt}{\tcb@arc@zpt}}
+\def\ncg@shadow@last#1#2#3#4{\ncg@fuzzylayer{#1}{#2}{#3}{#4}%
+  {\tcb@arc@sha@SW}{\tcb@arc@zpt}{\tcb@arc@zpt}{\tcb@arc@sha@SE}}
+\tcbset{%
+  fuzzy shadow/.style args={#1#2#3#4#5}{shad@w app={%
+    \begin{scope}[#5]%
+      \ifcsdef{ncg@shadow@\tcb@shapeofskin}{%
+        \letcs\ncg@shadow{ncg@shadow@\tcb@shapeofskin}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3-4\dimexpr#4\relax}{0.01}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3-3\dimexpr#4\relax}{0.02}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3-2\dimexpr#4\relax}{0.04}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3-#4\relax}{0.07}%
+        \ncg@shadow{#1}{#2}{#3}{0.11}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3+#4\relax}{0.11}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3+2\dimexpr#4\relax}{0.07}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3+3\dimexpr#4\relax}{0.04}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3+4\dimexpr#4\relax}{0.02}%
+        \ncg@shadow{#1}{#2}{\the\dimexpr#3+5\dimexpr#4\relax}{0.01}%
+      }{%
+        \letcs\tcb@shadow{tcb@shadow@\tcb@shapeofskin}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3-4\dimexpr#4\relax}{opacity=0.01}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3-3\dimexpr#4\relax}{opacity=0.02}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3-2\dimexpr#4\relax}{opacity=0.04}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3-#4\relax}{opacity=0.07}%
+        \tcb@shadow{#1}{#2}{#3}{opacity=0.11}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3+#4\relax}{opacity=0.11}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3+2\dimexpr#4\relax}{opacity=0.07}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3+3\dimexpr#4\relax}{opacity=0.04}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3+4\dimexpr#4\relax}{opacity=0.02}%
+        \tcb@shadow{#1}{#2}{\the\dimexpr#3+5\dimexpr#4\relax}{opacity=0.01}%
+      }%
+    \end{scope}}},%
+}
+\makeatother
+\usepackage{tikz,tikz-3dplot,tikz-cd,tkz-tab,tkz-euclide,pgf,pgfplots}
+\pgfplotsset{compat=newest}
+% \usepackage{comment} % For commenting large blocks of text and math efficiently
+% \usepackage{fancyvrb} % For custom verbatim environments
+\usepackage{multicol}
+\usepackage[bottom,multiple]{footmisc} % Ensures footnotes are at the bottom of the page, and separates footnotes by a comma if they are adjacent
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\renewcommand*{\finalnamedelim}{\addcomma\addspace} % Forces authors' names to be separated by comma, instead of "and"
+\addbibresource{generalbib}
+\usepackage[colorlinks,linkcolor=.,citecolor=red,urlcolor=blue]{hyperref}
+\usepackage[nameinlink]{cleveref} % nameinlink ensures that the entire element is clickable in the pdf, not just the number
+\pdfstringdefDisableCommands{\def\dual#1{#1*}\def\star{*}} % C*-algebras in PDF bookmarks
+\usepackage{ocgx2}
+\usepackage{scalerel,stackengine}
+\stackMath
+\newcommand\widecheck[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}% 
+}{0.5ex}}%
+\stackon[1pt]{#1}{\scalebox{-1}{\tmpbox}}%
+}
+\parskip 1ex
+
+\usepackage{subfiles}
+\DeclareDocumentCommand\floor{ l m }{\braces#1{\lfloor}{\rfloor}{#2}} % Floor function ⌊x⌋
+\DeclareDocumentCommand\ceil{ l m }{\braces#1{\lceil}{\rceil}{#2}} % Ceiling function ⌈x⌉
+
+\newlength\squareheight
+  \setlength\squareheight{6.75pt}
+  \newcommand\squareslash{\tikz{\draw (0,0) rectangle (\squareheight,\squareheight);\draw(0,0) -- (\squareheight,\squareheight)}}
+  \DeclareMathOperator\leftlifts{\squareslash}
+
+% Shortcuts for blackboard bold letters, e.g. \A outputs \mathbb{A}
+\def\do#1{\csdef{#1}{\mathbb{#1}}}
+\docsvlist{A,B,C,D,E,F,G,H,I,J,K,M,N,Q,R,T,U,V,W,X,Y,Z}
+% \H is already defined as a 1-argument command, it places a double acute accent (hungarumlaut) on a character, e.g. \H{o} yields ő
+% \L is already defined as the uppercase Ł (L with stroke)
+% \O is already defined as the uppercase Ø (O with stroke)
+% \P is already defined as the pilcrow ¶ (paragraph mark)
+% \S is already defined as the section sign §
+
+% Shortcuts for calligraphic letters, e.g. \As outputs \mathcal{A}
+\def\do#1{\csdef{#1s}{\mathcal{#1}}}
+\docsvlist{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+
+\newcommand*{\defeq}{\stackrel{\text{def}}{=}}
+\newcommand*{\defiff}{\stackrel{\text{def}}{\iff}}
+
+\usepackage{accents}
+\newlength{\dhatheight}
+\newcommand{\doublehat}[1]{%
+    \settoheight{\dhatheight}{\ensuremath{\hat{#1}}}%
+    \addtolength{\dhatheight}{-0.35ex}%
+    \hat{\vphantom{\rule{1pt}{\dhatheight}}%
+    \smash{\hat{#1}}}}
+
+% General Purpose
+
+
+\DeclareMathOperator{\UnivLift}{UnivLift}
+\DeclareMathOperator{\inj}{inj}
+\DeclareMathOperator{\Glimm}{Glimm}
+
+% Category Theory
+
+\DeclareMathOperator{\Cat}{Cat}
+\DeclareMathOperator{\nuCat}{\prescript{\text{nu}}{}{Cat}}
+\DeclareMathOperator{\LocSmallCat}{LocSmallCat}
+\DeclareMathOperator{\Grpoid}{Grpoid}
+\DeclareMathOperator{\Nat}{Nat}
+\DeclareMathOperator{\Fun}{Fun} %functors
+\DeclareMathOperator{\LexFun}{Fun^{\text{lex}}}
+\DeclareMathOperator{\Skele}{Skele}
+\DeclareMathOperator{\Sing}{Sing}
+\DeclareMathOperator{\LKan}{LKan}
+\DeclareMathOperator{\RKan}{RKan}
+\DeclareMathOperator{\Perf}{Perf}
+\DeclareMathOperator{\Fr}{Fr}
+
+\newcommand{\ChainComplex}[2]{\left(#1_{\bullet},#2_{\bullet}\right)}
+\newcommand{\ChainComplexes}[1]{\text{Ch}_{#1}}
+\newcommand{\boundedChainComplexes}[1]{\text{Ch}^b_{#1}}
+\newcommand{\HilbChainComplexes}[1]{\text{HilbCh}_{#1}}
+\newcommand{\CoChainComplex}[2]{\left(#1^{\bullet},#2^{\bullet}\right)}
+\newcommand{\CoChainComplexes}[1]{\text{CoCh}_{#1}}
+\newcommand{\Derived}[1]{\Ds\left(#1\right)}
+\newcommand{\boundedDerived}[1]{\Ds_b\left(#1\right)}
+\newcommand{\singDerived}[1]{\Ds_{\text{sng}}\left(#1\right)}
+\newcommand{\Prof}[1]{\text{Prof}\left(#1\right)}
+
+% Functional Analysis
+
+\newcommand{\inp}[2]{\left\langle #1 , #2 \right\rangle}
+\newcommand{\preinp}[3]{\prescript{}{#3}{\left\langle #1 | #2 \right\rangle} }
+\newcommand{\dual}[1]{{#1}^{\star}}
+\newcommand{\bidual}[1]{{#1}^{\star\star}}
+\newcommand{\TopVect}[1]{\text{TVS}_{#1}}
+\newcommand{\HausTopVect}[1]{\prescript{\text{Haus}}{}{\text{TVS}_{#1}}}
+\newcommand{\LocConv}[1]{\text{LCS}_{#1}}
+\newcommand{\HausLocConv}[1]{\prescript{\text{Haus}}{}{\text{LCS}_{#1}}}
+\newcommand{\BanSpace}[1]{\text{Ban}_{#1}}
+\newcommand{\FinDimBanSpace}[1]{\prescript{\text{f.d}}{}{\text{Ban}_{#1}}}
+\newcommand{\specradius}[2]{\text{r}_{#1}\left(#2\right)}
+\newcommand{\pushforwardmeasure}[2]{#1_{\star}#2}
+\newcommand{\compactdiff}[2]{\Cs_c^{#2}(#1)}
+\newcommand{\compactcont}[1]{\Cs_c(#1)}
+\newcommand{\diff}[2]{\Cs^{#2}(#1)}
+
+\DeclareMathOperator{\SN}{SN} %continuous seminorms on a TVS
+\DeclareMathOperator{\Germs}{Germs}
+\DeclareMathOperator{\NormedSpace}{Nor}
+\DeclareMathOperator{\SemiNor}{SNor}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\CompMet}{Met_{complete}}
+\DeclareMathOperator{\supp}{supp}
+
+% Quiver Representations
+
+\DeclareMathOperator{\Sink}{Sink}
+\DeclareMathOperator{\Source}{Source}
+\DeclareMathOperator{\Reg}{Reg}
+\DeclareMathOperator{\Inf}{Inf}
+\DeclareMathOperator{\Path}{Path}
+
+% Algebraic Geometry
+
+\DeclareMathOperator{\Ringed}{Ringed}
+\DeclareMathOperator{\LocRinged}{LocRinged}
+\DeclareMathOperator{\AffSch}{AffSch}
+
+% Operator Algebras
+
+\DeclareMathOperator{\TDS}{TopDynSys}
+\DeclareMathOperator{\MetDS}{MetDynSys}
+\DeclareMathOperator{\MDS}{MeasDynSys}
+\DeclareMathOperator{\finiterank}{FR}
+\DeclareMathOperator{\UnB}{Un\Bs}
+\DeclareMathOperator{\DenseUnB}{\prescript{\text{dense}}{}{Un\Bs}}
+\DeclareMathOperator{\NormedAlg}{NorAlg}
+\DeclareMathOperator{\UNormedAlg}{\prescript{1}{}{NorAlg}}
+\DeclareMathOperator{\BanAlg}{BanAlg}
+\DeclareMathOperator{\UBanAlg}{\prescript{1}{}{BanAlg}}
+\DeclareMathOperator{\ZtwoBanAlg}{BanAlg^{\Z/2}}
+\DeclareMathOperator{\CommBanAlg}{AbBanAlg}
+\DeclareMathOperator{\UCommBanAlg}{\prescript{1}{}{AbBanAlg}}
+\DeclareMathOperator{\preCstarAlg}{C^{\star}_{\text{pre}}Alg}
+\DeclareMathOperator{\CstarAlg}{C^{\star}Alg}
+\DeclareMathOperator{\ndCstarAlg}{C^{\star}Alg_{\text{nd}}}
+\DeclareMathOperator{\SepCstarAlg}{\prescript{}{\omega}{C^{\star}Alg}}
+\DeclareMathOperator{\SepUCstarAlg}{\prescript{1}{\omega}{C^{\star}Alg}}
+\DeclareMathOperator{\ExCstarAlg}{ExC^{\star}Alg}
+\DeclareMathOperator{\NucCstarAlg}{NucC^{\star}Alg}
+\DeclareMathOperator{\SepNucCstarAlg}{\prescript{}{\omega}{\NucCstarAlg}}
+\DeclareMathOperator{\TypeICstarAlg}{\prescript{\text{type I}}{}{C^{\star}Alg}}
+\DeclareMathOperator{\SigmaUCstarAlg}{\prescript{\sigma}{}{C^{\star}Alg}}
+\DeclareMathOperator{\CommCstarAlg}{AbC^{\star}Alg}
+\DeclareMathOperator{\ndCommCstarAlg}{AbC^{\star}Alg_{\text{nd}}}
+\DeclareMathOperator{\UCstarAlg}{\prescript{1}{}{C^{\star}Alg}}
+\DeclareMathOperator{\UCommCstarAlg}{\prescript{1}{}{AbC^{\star}Alg}}
+\DeclareMathOperator{\CPCstarAlg}{C^{\star}Alg_{\text{cp}}}
+\DeclareMathOperator{\UCPCstarAlg}{C^{\star}Alg_{\text{ucp}}}
+\DeclareMathOperator{\UCstarBiAlg}{\prescript{1}{}{C^{\star}BiAlg}}
+\DeclareMathOperator{\SchCstarAlg}{\prescript{Sch}{}{C^{\star}Alg}}
+\DeclareMathOperator{\redGrpCstarAlg}{\dual{C}_{\text{red}}}
+\DeclareMathOperator{\maxGrpCstarAlg}{\dual{C}_{\text{max}}}
+\DeclareMathOperator{\Multiplier}{Max^1}
+\DeclareMathOperator{\HSDist}{d_{\text{H.S.}}}
+\DeclareMathOperator{\WCQG}{Woro-CQG}
+\DeclareMathOperator{\WAbCQG}{Woro-AbCQG}
+\DeclareMathOperator{\PartOrdAbGrp}{OrdAbGrp^{\text{partially}}}
+\DeclareMathOperator{\OrdAbGrp}{OrdAbGrp}
+\DeclareMathOperator{\vNAlg}{vNAlg}
+\DeclareMathOperator{\AbvNAlg}{AbvNAlg}
+\DeclareMathOperator{\TrvNAlg}{TrvNAlg}
+\DeclareMathOperator{\OpSys}{OpSys}
+\DeclareMathOperator{\UniOpSys}{\prescript{1}{}{OpSys}}
+\DeclareMathOperator{\CstarOpSys}{\dual{C}-OpSys}
+\DeclareMathOperator{\UCstarOpSys}{\dual{C}-\prescript{1}{}{OpSys}}
+\DeclareMathOperator{\OpSpace}{OpSpace}
+\DeclareMathOperator{\VacvNAlg}{\prescript{\Omega}{}{\text{vNAlg}}}
+\DeclareMathOperator{\TopGrp}{Grp(Top)}
+\DeclareMathOperator{\TopAbGrp}{Ab(Top)}
+\DeclareMathOperator{\CompHausGrp}{Grp(CHaus)}
+\DeclareMathOperator{\LCHGrp}{Grp(LCH)}
+\DeclareMathOperator{\LCHAbGrp}{Ab(LCH)}
+\DeclareMathOperator{\CHAbGrp}{Ab(CHaus)}
+\DeclareMathOperator{\SaIdem}{Idem_{\text{s.a.}}}
+\DeclareMathOperator{\vertex}{vert}
+\DeclareMathOperator{\edge}{edge}
+\DeclareMathOperator{\Cay}{Cay}
+\DeclareMathOperator{\AffAlgSet}{AffAlgSet}
+\DeclareMathOperator{\IndComp}{Ind}
+\DeclareMathOperator{\Quiver}{Quiver}
+
+\newcommand{\Rep}[2]{\text{Rep}_{#1}^{#2}}
+\newcommand{\IrrRep}[2]{\prescript{\text{irr}}{}{\text{Rep}_{#1}^{#2}}}
+\newcommand{\starRep}[1]{\text{Rep}_{\star}\left(#1\right)}
+\newcommand{\UnistarRep}[1]{\text{Rep}_{\star,1}\left(#1\right)}
+\newcommand{\FinDimRep}[2]{\text{FinDimRep}_{#1}^{#2}}
+\newcommand{\BanBiMod}[2]{\prescript{}{#1}{\text{BanBiMod}_{#2}}}
+\newcommand{\selfadjointpart}[1]{#1_{\text{s.a.}}}
+\newcommand{\maxtensor}[2]{#1 \otimes_{\text{max}} #2}
+\newcommand{\mintensor}[2]{#1 \otimes_{\text{min}} #2}
+\newcommand{\GroupCstarAlg}[1]{#1\text{-}\CstarAlg}
+\newcommand{\SepGroupCstarAlg}[1]{#1\text{-}\prescript{}{\omega}{\CstarAlg}}
+\newcommand{\GroupBanAlg}[1]{#1\text{-}\BanAlg}
+\newcommand{\GroupContBanAlg}[1]{#1\text{-}\BanAlg_{\leq 1}}
+\newcommand{\crossedprod}[3]{#1 \rtimes_{#3} #2}
+\newcommand{\HSnorm}[1]{\norm{#1}_{\text{H.S.}}}
+\newcommand{\HSinp}[2]{\inp{#1}{#2}_{\text{H.S.}}}
+\newcommand{\CBnorm}[1]{\norm{#1}_{\text{c.b.}}}
+\newcommand{\pathequiv}[2]{#1 \sim_{\text{path}}#2}
+\newcommand{\MvNequiv}[2]{#1\sim_{\text{MvN}}#2}
+\newcommand{\stableequiv}[2]{#1\sim_{\text{stable}}#2}
+\newcommand{\subequiv}[2]{#1\sim_{\text{sub}}#2}
+
+
+% Group Theory
+
+\DeclareMathOperator{\fgGrp}{\prescript{\text{f.g.}}{}{\Grp}}
+\DeclareMathOperator{\Gal}{Gal}
+
+\newcommand{\actson}[2]{#1 \curvearrowright #2}
+\newcommand{\GSpaces}[1]{#1\curvearrowright\Top}
+
+% Measure Theory
+
+\newcommand{\probability}[2]{(#1,\Sigma_{#1},#2)}
+\newcommand{\measurable}[1]{(#1,\Sigma_{#1})}
+\newcommand{\measure}[2]{(#1,\Sigma_{#1},#2)}
+
+\DeclareMathOperator{\Meas}{Meas}
+\DeclareMathOperator{\MeasPre}{Meas_p}
+\DeclareMathOperator{\PMeasPre}{ProbMeas_p}
+\DeclareMathOperator{\Prob}{Prob}
+\DeclareMathOperator{\ProbPre}{Prob_p}
+\DeclareMathOperator{\starProb}{\prescript{\star}{}{\text{Prob}}}
+\DeclareMathOperator{\pmpProb}{\prescript{\text{p.m.p.}}{}{\text{Prob}}}
+
+% NC Homotopy Theory
+
+\newcommand{\similarity}[2]{#1 \sim_{\text{similar}} #2}
+\newcommand{\algequiv}[2]{#1 \sim_{\text{AlgEquiv}} #2}
+\newcommand{\simeotopic}[2]{#1 \sim_{\text{simeotopic}} #2}
+\newcommand{\KHigher}[2]{\text{K}_{#1}\left(#2\right)}
+\newcommand{\HigherK}[1]{\text{K}_{#1}}
+\newcommand{\topK}[1]{\text{K}^{#1}}
+\newcommand{\KK}[3]{\prescript{\text{Sep}}{}{\text{KK}_{#1}\left(#2,#3\right)}}
+\newcommand{\HigherKK}[2]{\prescript{}{\omega}{\text{KK}^{#1}_{#2}}}
+\newcommand{\BanKK}[3]{\text{KK}^{\text{ban}}_{#1}\left(#2,#3\right)}
+\newcommand{\Bankk}[1]{\text{KK}^{\text{ban}}_{#1}}
+\newcommand{\InfBankk}[1]{\text{KK}^{\text{ban},\infty}_{#1}}
+% \newcommand{\SepKk}[1]{\textbf{KK}^{#1}_{\text{Sep}}}
+% \newcommand{\Sepkk}[1]{\text{kk}^{#1}_{\text{Sep}}}
+\DeclareMathOperator{\kk}{\prescript{\omega}{}{kk}}
+\DeclareMathOperator{\Kk}{\prescript{\omega}{}{\textbf{KK}}}
+\DeclareMathOperator{\AllKK}{\textbf{KK}}
+\DeclareMathOperator{\allKK}{KK}
+\DeclareMathOperator{\Allkk}{kk}
+\newcommand{\ExactTri}[2]{\text{Ex}\Delta\left(#1,#2\right)}
+\newcommand{\SHo}[1]{\textbf{SHo}\left(#1\right)}
+\newcommand{\Ho}[1]{\textbf{Ho}\left(#1\right)}
+\newcommand{\SW}[1]{\textbf{SW}\left(#1\right)}
+\newcommand{\SpecK}[1]{\textbf{K}\left(#1\right)}
+\newcommand{\GTop}[1]{\Top_{#1}}
+\newcommand{\Pointification}[1]{#1_{\star}}
+\newcommand{\Opp}[1]{#1^{\text{op}}}
+\newcommand{\Mor}[3]{\text{Mor}_{#1}\left(#2,#3\right)}
+\newcommand{\SpMor}[3]{\text{hom}_{#1}\left(#2,#3\right)}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Simplex}{Simplex}
+\DeclareMathOperator{\SimpHom}{SimpHom}
+\DeclareMathOperator{\const}{const}
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\ExSeq}{ExSeq}
+\DeclareMathOperator{\MapCone}{cone}
+\DeclareMathOperator{\MapCyl}{cyl}
+\newcommand{\CompMorphisms}[1]{#1^{\to\to}}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\SK}{SK}
+\DeclareMathOperator{\Bundles}{Bund}
+\DeclareMathOperator{\FinDimBundles}{\prescript{}{\text{f.d.}}{Bund}}
+\DeclareMathOperator{\VecBundles}{VecBund}
+\DeclareMathOperator{\FinDimVecBundles}{\prescript{}{\text{f.d.}}{VecBund}}
+\DeclareMathOperator{\Animae}{An}
+\DeclareMathOperator{\PointedAnimae}{An_{\star}}
+\DeclareMathOperator{\FiniteAnimae}{An^{\text{fin}}}
+\DeclareMathOperator{\Iso}{Iso}
+\DeclareMathOperator{\TopPreSpectra}{PreSp_{\text{Top}}}
+\DeclareMathOperator{\TopSpectra}{Sp_{\text{Top}}}
+\DeclareMathOperator{\Spectra}{Sp}
+\DeclareMathOperator{\CatInfty}{Cat_{\infty}}
+\DeclareMathOperator{\FiniteCatInfty}{Cat_{\infty}^{\text{fin}}}
+\DeclareMathOperator{\StableInfty}{Cat_{\infty}^{\text{st}}}
+\DeclareMathOperator{\ExCatInfty}{Cat_{\infty}^{\text{ex}}}
+\DeclareMathOperator{\IdemCompInfty}{Cat_{\infty}^{\text{perf}}}
+\DeclareMathOperator{\ExFun}{Fun^{\text{ex}}}
+\DeclareMathOperator{\LExFun}{Fun^{\text{lex}}}
+\DeclareMathOperator{\RExFun}{Fun^{\text{rex}}}
+\DeclareMathOperator{\ExcFun}{Fun^{\text{exc}}}
+
+% Differential Geometry
+  
+\newcommand{\SmoothMfd}[3]{\prescript{#1}{#2}{\text{Mfd}}_{#3}}
+\newcommand{\tensorsection}[3]{\Gamma\left(\textbf{T}^{#1,#2},#3\right)}
+
+\newcommand{\cptSmoothMfd}[1]{\text{cptMfd}^{\infty}_{#1}}
+
+\DeclareMathOperator{\SmoothBundles}{\prescript{\infty}{}{\text{Bundles}}}
+\DeclareMathOperator{\SmoothVecBundles}{\prescript{\infty}{}{\text{VecBundles}}}
+\DeclareMathOperator{\RiemMet}{RiemMet}
+\DeclareMathOperator{\GeoMet}{GeoMet}
+\DeclareMathOperator{\biLipMet}{\prescript{\text{biLip}}{}{Met}}
+\DeclareMathOperator{\QIMet}{\prescript{\text{QI}}{}{Met}}
+\DeclareMathOperator{\hoQIMet}{Ho\left(\prescript{\text{QI}}{}{Met}\right)}
+\DeclareMathOperator{\QIsom}{QIsom}
+
+
+% Riemann Surfaces
+
+\DeclareMathOperator{\RiemSurface}{RiemSurf}
+\DeclareMathOperator{\Div}{Div}
+
+
+% (Algebraic) Topology
+
+\DeclareMathOperator{\CW}{\prescript{\text{CW}}{}{\text{Top}}}
+\DeclareMathOperator{\CWpairs}{\prescript{\text{CW}}{}{\text{Top}_{\text{rel}}}}
+\DeclareMathOperator{\finiteCW}{\prescript{\text{fin}.}{}{\textbf{CW}}}
+\DeclareMathOperator{\finitetypeCW}{\prescript{\text{fin}. \text{type}}{}{\textbf{CW}}}
+\DeclareMathOperator{\TopMfd}{TopMfd}
+\DeclareMathOperator{\Top}{Top}
+\DeclareMathOperator{\CGTop}{\prescript{\text{c.g.}}{}{\text{Top}}}
+\DeclareMathOperator{\hTop}{hoTop}
+\DeclareMathOperator{\pointedTop}{\Top_{\star}}
+\DeclareMathOperator{\LocCompHaus}{LCH}
+\DeclareMathOperator{\properLCH}{LCH_{\text{proper}}}
+\DeclareMathOperator{\CompHaus}{CHaus}
+\DeclareMathOperator{\Open}{Open}
+\DeclareMathOperator{\relTop}{Top_{\text{rel}}}
+\DeclareMathOperator{\hrelTop}{hTop_{\text{rel}}}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Deck}{Deck}
+
+
+% Algebra 
+
+\DeclareMathOperator{\Alg}{Alg}
+\DeclareMathOperator{\UniAlg}{\prescript{1}{}{\text{Alg}}}
+\DeclareMathOperator{\CommAlg}{AbAlg}
+\DeclareMathOperator{\UniCommAlg}{AbAlg^{\text{e}}}
+\DeclareMathOperator{\LieAlg}{LieAlg}
+\DeclareMathOperator{\StarAlg}{\prescript{\star}{}{\text{Alg}}}
+\DeclareMathOperator{\UniStarAlg}{\prescript{\star}{1}{\text{Alg}}}
+\DeclareMathOperator{\AbsCont}{AbsCont}
+\DeclareMathOperator{\Grp}{Grp}
+\DeclareMathOperator{\AbGrp}{AbGrp}
+\DeclareMathOperator{\FinGrp}{\prescript{\text{fin}}{}{Grp}}
+\DeclareMathOperator{\SiGrp}{SiGrp}
+\DeclareMathOperator{\DivGrp}{DivGrp}
+\DeclareMathOperator{\SemiGrp}{SemiGrp}
+\DeclareMathOperator{\AbSemiGrp}{AbSemiGrp}
+\DeclareMathOperator{\CountSemiGrp}{\prescript{}{\omega}{SemiGrp}}
+\DeclareMathOperator{\Monoid}{Mon}
+\DeclareMathOperator{\CountMonoid}{\prescript{}{\omega}{Mon}}
+\DeclareMathOperator{\DimGrp}{DimGrp}
+\DeclareMathOperator{\SymGrp}{Sym}
+\DeclareMathOperator{\AltGrp}{Alt}
+\DeclareMathOperator{\Stab}{Stab}
+\DeclareMathOperator{\Rng}{Rng}
+\DeclareMathOperator{\UniRng}{Rng^1}
+\DeclareMathOperator{\CommRng}{AbRng}
+\DeclareMathOperator{\UniCommRng}{AbRng^1}
+\DeclareMathOperator{\Fields}{Flds}
+\DeclareMathOperator{\Tor}{Tor}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\PreShv}{PreShv}
+\DeclareMathOperator{\Shv}{Shv}
+\DeclareMathOperator{\Hilb}{\prescript{\C}{}{\text{Hilb}}}
+\DeclareMathOperator{\RHilb}{\prescript{\R}{}{\text{Hilb}}}
+
+\newcommand{\Vect}[1]{\text{Vec}_{#1}}
+\newcommand{\OrdVect}{\text{OrdVec}}
+\newcommand{\FinDimVect}[1]{\prescript{}{\text{f.d.}}{\text{Vect}}_{#1}}
+\newcommand{\abelianization}[1]{#1_{\text{ab}}}
+\newcommand{\constantpresheaf}[1]{\underline{#1}^{\text{pre}}}
+\newcommand{\constantsheaf}[1]{\underline{#1}}
+\newcommand{\Gset}[1]{\Set_{#1}}
+\newcommand{\HilbMod}[1]{\text{HilbMod}_{#1}}
+\newcommand{\leftHilbMod}[1]{\prescript{}{#1}{\text{HilbMod}}}
+\newcommand{\BiHilbMod}[2]{\prescript{}{#1}{\text{HilbMod}}_{#2}}
+\newcommand{\Mod}[1]{\prescript{}{#1}{\text{Mod}}}
+\newcommand{\fgpMod}[1]{\prescript{}{#1}{\text{Mod}}_{\text{f.g.p.}}}
+\newcommand{\fgMod}[1]{\prescript{}{#1}{\text{Mod}}_{\text{f.g.}}}
+\newcommand{\rightMod}[1]{\text{Mod}_{#1}}
+\newcommand{\BiMod}[2]{\prescript{}{#1}{\text{Mod}}_{#2}}
+\newcommand{\starMod}[1]{\prescript{}{#1}{\text{Mod}_{\star}}}
+\newcommand{\lift}[1]{#1^{\leftlifts}}
+\newcommand{\prelift}[1]{\prescript{\leftlifts}{}{#1}}
+\newcommand{\arrowcat}[1]{\text{Arr}\left(#1\right)}
+\newcommand{\domain}[1]{\dom\left({#1}\right)}
+\newcommand{\cone}[1]{#1_{\rightarrow}}
+\newcommand{\cocone}[1]{#1_{\leftarrow}}
+\newcommand{\lc}[1]{\text{lc}\left(#1\right)}
+\newcommand{\natto}[0]{\Rightarrow}
+
+% -------------------------------------
+
+%Math Operators
+\DeclareMathOperator{\Aff}{Aff}
+\DeclareMathOperator{\ClosedOp}{ClosedOp}
+\DeclareMathOperator{\Des}{Des}
+\DeclareMathOperator{\Inv}{Inv}
+\DeclareMathOperator{\CovRep}{CovRep}
+\DeclareMathOperator{\CovSys}{CovSys}
+\DeclareMathOperator{\Cof}{Cof}
+\DeclareMathOperator{\Fib}{Fib}
+\DeclareMathOperator{\LeftKan}{LKan}
+\DeclareMathOperator{\RightKan}{RKan}
+\DeclareMathOperator{\colim}{colim}
+\DeclareMathOperator{\St}{St}
+\DeclareMathOperator{\Der}{Der}
+\DeclareMathOperator{\Unitary}{\Us}
+\DeclareMathOperator{\field}{field}
+\DeclareMathOperator{\Id}{Id}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\codom}{codom}
+\DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\Ord}{Ord}
+\DeclareMathOperator{\TC}{TC}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Bor}{Bor}
+\DeclareMathOperator{\Baire}{Baire}
+\DeclareMathOperator{\Vol}{Vol}
+% \DeclareMathOperator{\Bin}{Bin}
+% \DeclareMathOperator{\Bern}{Bern}
+% \DeclareMathOperator{\Geom}{Geom}
+% \DeclareMathOperator{\DiscUnif}{DiscUnif}
+% \DeclareMathOperator{\Po}{Po}
+% \DeclareMathOperator{\Un}{Un}
+% \DeclareMathOperator{\Exp}{Exp}
+% \DeclareMathOperator{\NegBin}{NegBin}
+% \DeclareMathOperator{\MSE}{MSE}
+% \DeclareMathOperator{\bias}{bias}\prescript{}{\star}{\text{Alg}}
+\DeclareMathOperator{\Cal}{Cal}
+\DeclareMathOperator{\conv}{conv} %This computes the convex hull of a given set
+\DeclareMathOperator{\OrthProj}{OrthProj}
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\alg}{alg}
+\DeclareMathOperator{\States}{States}
+\DeclareMathOperator{\PureStates}{States_{\text{Pure}}}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Cyl}{Cyl}
+\DeclareMathOperator{\Susp}{Sus}
+\DeclareMathOperator{\Cone}{Cone}
+\DeclareMathOperator{\CoCone}{CoCone}
+\DeclareMathOperator{\Cofibre}{Cofibre}
+\DeclareMathOperator{\Fibre}{Fibre}
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\ext}{ext}
+\DeclareMathOperator{\Matr}{Mat}
+\DeclareMathOperator{\Free}{Free}
+\DeclareMathOperator{\FredholmOp}{Fred}
+
+\DeclareMathOperator{\Irr}{Irr}
+\DeclareMathOperator{\Inn}{Inn}
+\DeclareMathOperator{\Out}{Out}
+% \DeclareMathOperator{\Cdynamicalsystem}{C^{\star}-DynamSys}
+\DeclareMathOperator{\Adj}{Adj}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\CoKer}{CoKer}
+\DeclareMathOperator{\Ab}{Ab}
+\DeclareMathOperator{\Idem}{Idem}
+\DeclareMathOperator{\Comp}{Comp}
+
+
+% Other Commands
+
+\newcommand{\modarith}[2]{\equiv #1 \ (\text{mod} \ #2)}
+\newcommand{\bP}[0]{\mathbb{P}}
+\newcommand{\bS}[0]{\mathbb{S}}
+\newcommand{\len}[2]{\text{len}_{#1}\left(#2\right)}
+\newcommand{\evaluationfun}[1]{\text{ev}_{#1}}
+\newcommand{\tensor}[3]{#2 \otimes_{#1} #3}
+\newcommand{\ctensor}[3]{#2 \widehat{\otimes}_{#1} #3}
+\newcommand{\univcone}[3]{c_{\text{univ}}(#1,#2,#3_{\text{univ}})}
+\newcommand{\LieBrac}[2]{\left[#1,#2\right]}
+\newcommand{\restrict}[2]{\text{Res}^{#1}_{#2}}
+\newcommand{\induct}[2]{\text{Ind}^{#1}_{#2}}
+
+\newcommand{\Ad}[1]{\text{Ad}\left(#1\right)}
+\newcommand{\Ass}[1]{\text{Ass}\left(#1\right)}
+\newcommand{\MiniAss}[1]{\text{MiniAss}\left(#1\right)}
+\newcommand{\commacat}[2]{#1 \downarrow #2}
+\newcommand{\essentialspectrum}[1]{\sigma_{\text{ess}}\left(#1\right)}
+\newcommand{\preim}[2]{#1^{\leftarrow}\left(#2\right)}
+\newcommand{\permute}[2]{P\left(#1,#2\right)}
+% \newcommand{\poset}[1]{\left(#1,\leq_{#1}\right)}
+% \newcommand{\soset}[1]{\left(#1, <_{#1}\right)}
+\newcommand{\smooth}[1]{\Cs^{\infty}(#1)}
+% \newcommand{\disteq}[0]{=^{\Ds}}
+% \newcommand{\expect}[1]{\text{E}\left(#1\right)}
+% \newcommand{\parexpect}[2]{\text{E}_{#2}\left(#1\right)}
+% \newcommand{\variance}[1]{\text{Var}\left(#1\right)}
+% \newcommand{\covariance}[2]{\text{Cov}\left(#1,#2\right)}
+% \newcommand{\correlation}[2]{\text{Corr}\left(#1,#2\right)}
+% \newcommand{\iid}[0]{\stackrel{\text{i.i.d}}{\sim}}
+% \newcommand{\expectqm}[2]{\langle #1 \rangle_{#2}} %This is meant to calculate expectation of an observable
+\newcommand{\idealann}[2]{\text{ann}_{#2}\left(#1\right)}
+\newcommand{\ann}[1]{{#1}^{\perp}} %the annihilator of a set in a Hilbert space or even a Banach space.
+\newcommand{\preann}[1]{\prescript{\perp}{}{#1}}
+\newcommand{\spectrum}[2]{\sigma_{#1}\left(#2\right)}
+\newcommand{\nuspectrum}[2]{\sigma_{#1}^{\text{nu}}\left(#2\right)}
+\newcommand{\mlf}[1]{\Sigma\left(#1\right)} %the set of multiplicative linear functionals on an algebra
+\newcommand{\bal}[1]{\text{bal}\left(#1\right)} %the balanced hull of any set
+\newcommand{\absconv}[1]{\text{AbsConv}\left(#1\right)} %the absolutely convex hull of any set
+\newcommand{\esssup}[1]{\text{ess sup}\left(#1\right)}
+\newcommand{\essrange}[1]{\text{ess ran}\left(#1\right)} %the essential range of a function
+\newcommand{\loopspace}[1]{\Omega\left(#1\right)} %loop space of a pointed space
+\newcommand{\suspension}[1]{\Sigma\left(#1\right)} % suspension of a pointed space
+\newcommand{\tidy}[1]{#1_{\text{tidy}}}
+\newcommand{\LHdual}[1]{#1^{\sharp}} %involution on a (left) Hilbert algebra
+\newcommand{\RHdual}[1]{#1^{\flat}}
+\newcommand{\Hinp}[2]{\left(#1|#2\right)}
+\newcommand{\codim}[1]{\text{codim}\left(#1\right)}
+% \newcommand{\algdual}[1]{\Hom(#1,\C)}
+% \newcommand{\lincom}[1]{\text{LC}(#1)}
+% \newcommand{\liebrac}[2]{[#1,#2]}
+\newcommand{\coker}[1]{\text{coker}\left(#1\right)}
+\newcommand{\coran}[1]{\text{coran}\left(#1\right)}
+\newcommand{\FredholmIndex}[1]{\text{Index}\left(#1\right)}
+\newcommand{\MIndex}[1]{\text{M}-\text{Index}\left(#1\right)}
+\newcommand{\Ind}[2]{\text{ind}_{#1}\left(#2\right)}
+\newcommand{\aInd}[1]{\text{a-ind}\left(#1\right)}
+\newcommand{\tInd}[1]{\text{t-ind}\left(#1\right)}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\transpose}[1]{#1^{\text{t}}}
+\newcommand{\Bilinear}[3]{\text{BiHom}\left(#1 \times #2, #3\right)}
+\newcommand{\Multilinear}[2]{\text{MultiHom}\left(#1, #2\right)}
+\newcommand{\AltMultilinear}[2]{\text{AltMultiHom}\left(#1,#2\right)}
+\newcommand{\CommaUp}[2]{#1 \uparrow #2}
+\newcommand{\CommaDown}[2]{#1 \downarrow #2}
+\newcommand{\projseminorms}[0]{\Ps_{\text{proj}}}
+\newcommand{\indseminorms}[0]{\Ps_{\text{ind}}}
+\newcommand{\character}[1]{\text{Char}\left(#1\right)}
+\newcommand{\localint}[2]{L^{#1}_{\text{loc}}(#2)}
+\newcommand{\principal}[1]{\text{PV}\left(#1\right)}
+
+%Commutative Algebra
+\newcommand{\Spec}[1]{\text{Spec}\left(#1\right)}
+\newcommand{\Spm}[1]{\text{MaxSpec}\left(#1\right)}
+\newcommand{\JacobRad}[1]{\text{Rad}_{\text{Jacobson}}\left(#1\right)}
+\newcommand{\NilRad}[1]{\text{Rad}_{\text{Nil}}\left(#1\right)}
+
+%Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\cyclic}[1]{\left\langle #1 \right\rangle}
+\newcommand{\Mat}[3]{\text{M}_{#1 \times #2}\left(#3\right)}
+\DeclareMathOperator{\Frac}{Frac}
+\DeclareMathOperator{\Conv}{Conv}
+
+%Topology
+\newcommand{\sphere}[3]{S_{#1}\left(#2,#3\right)}
+\newcommand{\ball}[3]{B_{#1}\left(#2,#3\right)}
+\newcommand{\topo}[1]{(#1,\tau_{#1})}
+\newcommand{\net}[3]{\left(#1_{#2}\right)_{#2 \in #3}} 
+%Label the variable for the net, label the index and label the underlying directed set
+\newcommand{\closure}[2]{\text{cl}_{#2}\left(#1\right)}
+\newcommand{\interior}[2]{\text{int}_{#2}\left(#1\right)}
+\newcommand{\paths}[2]{\text{Paths}\left(#1,#2\right)}
+\newcommand{\sk}[2]{\text{sk}_{#1}\left(#2\right)}
+
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\acc}{acc}
+
+
+% \newcommand{\NatTrans}[3]{#1: #2 \Rightarrow #3}
+\DeclareMathOperator{\Morphisms}{Mor}
+
+\newcommand{\isomorphic}[3]{#2 \simeq_{#1} #3}
+
+\DeclareMathOperator{\Maps}{Maps}
+\DeclareMathOperator{\Calkin}{\Qs}
+\DeclareMathOperator{\Set}{Set}
+\DeclareMathOperator{\sSet}{sSet}
+\newcommand{\simpcat}[1]{\textit{s}#1}
+\newcommand{\cosimpcat}[1]{\text{co-s}#1}
+\DeclareMathOperator{\FiniteSet}{\prescript{\text{fin}.}{}{Set}}
+\DeclareMathOperator{\Rel}{Rel}
+\DeclareMathOperator{\Pos}{Pos}
+
+
+\DeclareMathOperator{\Syz}{Syz}
+
+\DeclareMathOperator{\Cast}{Cast}
+\DeclareMathOperator{\Clopen}{Clopen}
+\DeclareMathOperator{\Obj}{Obj}
+
+
+\DeclareMathOperator{\equalizer}{Eq}
+\DeclareMathOperator{\coequalizer}{CoEq}
+
+
+
+%Algebraic Topology
+
+\newcommand{\homotopic}[3]{#1 \stackrel{#3}{\simeq} #2}
+\newcommand{\relhomotopic}[4]{#1 \stackrel{#3}{\simeq} #2 \ \text{rel}(#4)}
+
+
+%Algebraic Geometry
+
+\newcommand{\zeroset}[1]{\Vs\left(#1\right)}
+
+% Shortcuts for inverse hyperbolic functions (and other operators with the same structure)
+\def\do#1{\csdef{#1}{\trigbraces{\operatorname{#1}}}}
+\docsvlist{
+    asinh,acosh,atanh,acoth,asech,acsch,
+    arsinh,arcosh,artanh,arcoth,arsech,arcsch,
+    arcsinh,arccosh,arctanh,arccoth,arcsech,arccsch,
+    sen,tg,cth,senh,tgh,ctgh,
+    Re,Im,arg,Arg,im,ker
+}
+
+% \spn has to be defined separately as the syntax "spn" is different from the output "span"
+% \span is already defined in the LaTeX kernel. This is a fundamental LaTeX command, DO NOT overwrite it!
+\newcommand{\spn}{\trigbraces{\operatorname{span}}}
+
+\makeatletter
+% Redefining the commands \iff (given by LaTeX), \implies and \impliedby (given by amsmath)
+% Math mode is automatically enforced, starred version makes the arrows shorter
+\renewcommand{\impliedby}{\@ifstar{\ensuremath{\Longleftarrow}}{\ensuremath{\Leftarrow}}} % Corresponding Unicode character: U+21D0 ⇐
+\renewcommand{\implies}{\@ifstar{\ensuremath{\Longrightarrow}}{\ensuremath{\Rightarrow}}} % Corresponding Unicode character: U+21D2 ⇒
+\renewcommand{\iff}{\@ifstar{\ensuremath{\Longleftrightarrow}}{\ensuremath{\Leftrightarrow}}} % Corresponding Unicode character: U+21D4 ⇔
+\makeatother
+
+\newtheoremstyle{mystyle}{}{}{}{}{\sffamily\bfseries}{.}{ }{}
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par\pushQED{\qed}{\normalfont\sffamily\bfseries\topsep6\p@\@plus6\p@\relax #1\@addpunct{.} }}{\popQED\endtrivlist\@endpefalse}
+\makeatother
+
+
+
+% \renewcommand{\qedsymbol}{\coolqed{0.40}} % Implements the new QED symbol
+
+\renewcommand{\qedsymbol}{\coolqed} % Implements the new QED symbol
+
+\theoremstyle{mystyle}{\newtheorem*{motiv}{Motivation}}
+\theoremstyle{mystyle}{\newtheorem*{claim}{Claim}}
+\theoremstyle{mystyle}{\newtheorem*{subclaim}{Subclaim}}
+% \theoremstyle{mystyle}{\newtheorem{conjecture}{Conjecture}}
+
+% Warning environment
+\newtheoremstyle{warn}{}{}{}{}{\normalfont}{}{ }{}
+\theoremstyle{warn}
+\newtheorem*{warning}{\warningsign{0.2}\relax}
+
+% Symbol for the warning environment, designed to be easily scalable
+\newcommand{\warningsign}[1]{
+    \tikz[scale=#1,every node/.style={transform shape}]{
+        \draw[-,line width={#1*0.8mm},red,fill=yellow,rounded corners={#1*2.5mm}] (0,0)--(1,{-sqrt(3)})--(-1,{-sqrt(3)})--cycle;
+        \node at (0,-1) {\fontsize{48}{60}\selectfont\bfseries!};
+}}
+
+% \newcommand{\coolqed}[1]{\includegraphics[width=#1cm]{Trollface.png}} % QED symbol
+
+\newcommand{\coolqed}{\ensuremath{\blacksquare}} % QED symbol (\ensuremath: \qed is used in text mode)
+
+% verbbox environment, for showing verbatim text next to code output (for package documentation and user learning purposes)
+\NewTCBListing{verbbox}{ !O{} }{boxrule=1pt,sidebyside,skin=bicolor,colback=gray!10,colbacklower=white,valign=center,top=2pt,bottom=2pt,left=2pt,right=2pt,#1} % Last argument allows more tcolorbox options to be added
+
+
+\makeatletter
+% \fsize stores the current font size but is expandable (and can be called later without using \makeatletter and \makeatother)
+\def\fsize{\dimexpr\f@size pt\relax}
+\makeatother
+
+\makeatletter
+% Adapted from https://tex.stackexchange.com/a/19700
+\def\my@vector #1,#2\@eolst{
+    \ifx\relax#2\relax
+        #1
+    \else
+        #1\my@delim
+        \my@vector #2\@eolst
+    \fi}
+\newcommand\vcstring[2][\\]{% Converts comma-separated string to #1-separated string
+    \def\my@delim{#1}
+        \my@vector #2,\relax\noexpand\@eolst}
+\newcommand\cvc[2][p]{% Converts comma-separated string to column vector, optional argument defines matrix brackets
+    \def\my@delim{\\}
+        \begin{#1matrix} % Empty argument also possible
+            \my@vector #2,\relax\noexpand\@eolst
+        \end{#1matrix}}
+\newcommand\rvc[2][p]{% Converts comma-separated string to row vector, optional argument defines matrix brackets
+    \def\my@delim{&}
+        \begin{#1matrix} % Empty argument also possible
+            \my@vector #2,\relax\noexpand\@eolst
+        \end{#1matrix}}
+% Matrix environment with variable number of arguments. Adapted from https://davidyat.es/2016/07/27/writing-a-latex-macro-that-takes-a-variable-number-of-arguments/
+\newcommand{\mat}[2][p]{
+    \def\matrixenvironment{#1matrix} % Specifying the matrix brackets, this has to be done beforehand as '#1' changes under \passtonextarg
+    \def\my@delim{&}
+        \begin{\matrixenvironment} % Begin matrix environment
+            \my@vector #2,\relax\noexpand\@eolst
+            \@ifnextchar\bgroup{\passtonextarg}{\end{\matrixenvironment}}% % Pass to next argument (if any), otherwise end matrix environment
+}
+\newcommand{\passtonextarg}[1]{\\ \my@vector #1,\relax\noexpand\@eolst
+    \@ifnextchar\bgroup{\passtonextarg}{\end{\matrixenvironment}}% Passing to next argument
+}
+\makeatother
+
+\usepackage{varwidth}
+
+\definecolor{tcol_DEF}{HTML}{C32148} % Color for Definition
+\definecolor{tcol_PRP}{HTML}{702963} % Color for Proposition
+\definecolor{tcol_LEM}{HTML}{007BA7} % Color for Lemma
+\definecolor{tcol_THM}{HTML}{B31B1B} % Color for Theorem
+\definecolor{tcol_COR}{HTML}{002E63} % Color for Corollary
+\definecolor{tcol_REM}{HTML}{21ABCD} % Color for Remark
+\definecolor{tcol_PRF}{HTML}{367588} % Color for Proof
+\definecolor{tcol_CLM}{HTML}{FF033E} % Color for Claim
+\definecolor{tcol_SUBCLM}{HTML}{8DB600} % Color for Sub-Claim
+\definecolor{tcol_CONJ}{HTML}{BD33A4} % Color for Conjecture
+\definecolor{tcol_QUE}{HTML}{008000} % Color for Question
+\definecolor{tcol_EXA}{HTML}{9966CC} % Color for Example
+\definecolor{tcol_NOTA}{HTML}{177245} % Color for Notation
+\definecolor{tcol_CONST}{HTML}{0000FF} % Color for Construction
+\definecolor{tcol_TERM}{HTML}{333399} % Color for Terminology
+\definecolor{tcol_AXI}{HTML}{3C1414} % Color for Axiom
+\definecolor{tcol_INT}{HTML}{FBCCE7} % Color for Intuition
+\definecolor{tcol_MOT}{HTML}{01796F} % Color for Motivation
+\definecolor{tcol_QUO}{HTML}{01796F} % Color for Quotes
+\definecolor{bancolor}{RGB}{62,96,111}
+
+% Fast left-rule boxes. A box with
+%   `frame hidden,interior hidden,enhanced,borderline west={W}{0pt}{C},left=L'
+% draws its rule as a TikZ line of width W lying just inside the left edge of
+% the box. The two skins below draw exactly the same rectangle with pgf's basic
+% layer instead (no TikZ), which makes these boxes 2-3 times faster to typeset.
+% `ncg left rule={W}{C}{L}' is a drop-in replacement for the keys above;
+% `ncg left rule filled={W}{C}{L}{B}' additionally fills the box with colour B
+% (as `enhanced jigsaw,colback=B' did).
+\makeatletter
+\newcommand{\ncgLeftRuleFrame}{%
+  \begin{pgfscope}%
+  \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{\kvtcb@left@rule}{\tcb@height}}%
+  \pgfsetfillcolor{tcbcolframe}%
+  \pgfusepath{fill}%
+  \end{pgfscope}}
+\makeatother
+\tcbsubskin{ncgleftrule}{standard}{frame code=\ncgLeftRuleFrame,interior code=,
+  skin first=ncgleftrule,skin middle=ncgleftrule,skin last=ncgleftrule}
+\tcbsubskin{ncgleftrulefilled}{standard}{frame code=\ncgLeftRuleFrame,
+  skin first=ncgleftrulefilled,skin middle=ncgleftrulefilled,skin last=ncgleftrulefilled}
+\tcbset{
+  ncg left rule/.style n args={3}{%
+    skin=ncgleftrule,
+    colframe=#2,leftrule=#1,rightrule=0pt,toprule=0pt,bottomrule=0pt,
+    arc=0pt,outer arc=0pt,left=#3-#1},
+  ncg left rule filled/.style n args={4}{%
+    skin=ncgleftrulefilled,colback=#4,
+    colframe=#2,leftrule=#1,rightrule=0pt,toprule=0pt,bottomrule=0pt,
+    arc=0pt,outer arc=0pt,left=#3-#1},
+}
+
+\tcbset{
+tbox_DEF_style/.style={enhanced jigsaw,
+    colback=white,colframe=tcol_DEF!20!black,,
+    fonttitle=\sffamily\bfseries,
+    separator sign=.,label separator={},
+    sharp corners,top=2pt,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_PRP_style/.style={enhanced jigsaw,
+    colback=white,colframe=tcol_PRP!20!black,
+    fonttitle=\sffamily\bfseries,
+    attach boxed title to top left={yshift=-\tcboxedtitleheight},
+    boxed title style={
+        boxrule=0pt,boxsep=2.5pt,
+        colback=tcol_PRP!40!black,colframe=tcol_PRP!40!black,
+        sharp corners=uphill
+    },
+    separator sign=.,label separator={},
+    top=\tcboxedtitleheight,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,drop fuzzy shadow,breakable
+},
+tbox_THM_style/.style={enhanced jigsaw,
+    colback=white,colframe=tcol_THM!20!black,
+    fonttitle=\sffamily\bfseries,coltitle=white,
+    attach boxed title to top left={xshift=10pt,yshift=-\tcboxedtitleheight/2},
+    boxed title style={
+        colback=tcol_THM!40!black,colframe=tcol_THM!40!black,height=16pt,bean arc
+    },
+    separator sign=.,label separator={},
+    sharp corners,top=6pt,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_LEM_style/.style={enhanced jigsaw,
+    colback=white,colframe=tcol_LEM!20!black,
+    boxrule=0pt,
+    fonttitle=\sffamily\bfseries,
+    attach boxed title to top left={yshift=-\tcboxedtitleheight},
+    boxed title style={
+        boxrule=0pt,boxsep=2pt,
+        colback=tcol_LEM!80!black,colframe=tcol_LEM!80!black,
+        interior code={\fill[tcol_LEM!80!black] (interior.north west)--(interior.south west)--([xshift=-2mm]interior.south east)--([xshift=2mm]interior.north east)--cycle;
+    }},
+    separator sign=.,label separator={},borderline north={1pt}{0pt}{tcol_LEM!20!black},
+    before upper={\hspace{\tcboxedtitlewidth}},
+    sharp corners,top=2pt,bottom=2pt,left=5pt,right=5pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_COR_style/.style={enhanced jigsaw,
+    colback=white,colframe=tcol_COR!20!black,
+    fonttitle=\sffamily\bfseries,
+    attach boxed title to top left={yshift=-\tcboxedtitleheight},
+    boxed title style={
+        boxrule=0pt,boxsep=2.5pt,
+        colback=tcol_COR!40!black,colframe=tcol_COR!40!black,
+        sharp corners=northeast
+    },
+    separator sign=.,label separator={},
+    top=\tcboxedtitleheight,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,drop fuzzy shadow,breakable
+},
+tbox_AXI_style/.style={enhanced jigsaw,
+    colback=white,colframe=tcol_AXI!20!black,
+    fonttitle=\sffamily\bfseries,coltitle=white,
+    attach boxed title to top center ={xshift=10pt,yshift=-\tcboxedtitleheight/2},
+    boxed title style={
+        colback=tcol_AXI!50!black,colframe=tcol_AXI!80!black,height=16pt,bean arc
+    },
+    separator sign=.,label separator={},
+    sharp corners,top=6pt,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_TERM_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_REM_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_EXA_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_NOTA_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_CONST_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_INT_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_CONJ_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+tbox_QUE_style/.style={boxrule=0pt,boxsep=0pt,blanker,
+fonttitle=\sffamily\bfseries,coltitle=black,
+separator sign={},label separator={},
+description font=\normalfont\sffamily,
+description delimiters={(}{)},
+attach title to upper,after title={.\ },
+ncg left rule={0.5pt}{black}{8pt},right=8pt,
+before skip=10pt,after skip=10pt,breakable
+},
+myboxstyle/.style={enhanced,skin=enhanced jigsaw,
+attach boxed title to top left={xshift=-3mm,yshift=-\tcboxedtitleheight/2},
+coltitle=black,varwidth boxed title=1\linewidth,
+colbacktitle=#1!75, colback=white,sharp corners,
+top=2ex,
+boxed title style={sharp corners, boxrule=0pt},
+underlay boxed title={
+\fill[#1] (title.south west) -- (title.south-|frame.west)--++(0,-.5*\tcboxedtitleheight)--cycle;
+\fill[#1] (title.north east) --++(-.5*\tcboxedtitleheight,0)--++(0,.5*\tcboxedtitleheight)--cycle;}},
+    myboxstyle/.default=bancolor}
+
+
+\newtcolorbox{motivation}[2]{myboxstyle,title={#1}}
+
+\newtcbtheorem[number within = section,
+    crefname={\color{tcol_DEF!50!black} definition}{\color{tcol_DEF!50!black} definitions},
+    Crefname={\color{tcol_DEF!50!black} Definition}{\color{tcol_DEF!50!black} Definitions}
+    ]{definition}{Definition}{tbox_DEF_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_PRP!50!black} proposition}{\color{tcol_PRP!50!black} propositions},
+    Crefname={\color{tcol_PRP!50!black} Proposition}{\color{tcol_PRP!50!black} Propositions}
+    ]{proposition}{Proposition}{tbox_PRP_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_THM!80!black} theorem}{\color{tcol_THM!80!black} theorems},
+    Crefname={\color{tcol_THM!80!black} Theorem}{\color{tcol_THM!80!black} Theorems}
+    ]{theorem}{Theorem}{tbox_THM_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_LEM!50!black} lemma}{\color{tcol_LEM!50!black} lemmas},
+    Crefname={\color{tcol_LEM!50!black} Lemma}{\color{tcol_LEM!50!black} Lemmas}
+    ]{lemma}{Lemma}{tbox_LEM_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_COR!50!black} corollary}{\color{tcol_COR!50!black} corollaries},
+    Crefname={\color{tcol_COR!50!black} Corollary}{\color{tcol_COR!50!black} Corollaries}
+    ]{corollary}{Corollary}{tbox_COR_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_AXI!50!black} axiom}{\color{tcol_AXI!50!black} axioms},
+    Crefname={\color{tcol_AXI!50!black} Axiom}{\color{tcol_AXI!50!black} Axioms}
+    ]{axiom}{Axiom}{tbox_AXI_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_TERM!50!black} terminology}{\color{tcol_TERM!50!black} terminologies},
+    Crefname={\color{tcol_TERM!50!black} Terminology}{\color{tcol_TERM!50!black} Terminologies}
+    ]{terminology}{Terminology}{tbox_TERM_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_REM!50!black} remark}{\color{tcol_REM!50!black} remarks},
+    Crefname={\color{tcol_REM!50!black} Remark}{\color{tcol_REM!50!black} Remarks}
+    ]{remark}{Remark}{tbox_REM_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_EXA!50!black} example}{\color{tcol_EXA!50!black} examples},
+    Crefname={\color{tcol_EXA!50!black} Example}{\color{tcol_EXA!50!black} Examples}
+    ]{example}{Example}{tbox_EXA_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_NOTA!50!black} notation}{\color{tcol_NOTA!50!black} notations},
+    Crefname={\color{tcol_NOTA!50!black} Notation}{\color{tcol_NOTA!50!black} Notations}
+    ]{notation}{Notation}{tbox_NOTA_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_CONST!50!black} construction}{\color{tcol_CONST!50!black} constructions},
+    Crefname={\color{tcol_CONST!50!black} Construction}{\color{tcol_CONST!50!black} Constructions}
+    ]{construction}{Construction}{tbox_CONST_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_INT!50!black} intuition}{\color{tcol_INT!50!black} intuitions},
+    Crefname={\color{tcol_INT!50!black} Intuition}{\color{tcol_INT!50!black} Intuitions}
+    ]{intuition}{Intuition}{tbox_INT_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_QUE!50!black} question}{\color{tcol_QUE!50!black} questions},
+    Crefname={\color{tcol_QUE!50!black} Question}{\color{tcol_QUE!50!black} Questions}
+    ]{Question}{Question}{tbox_QUE_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_QUE!50!black} answer}{\color{tcol_QUE!50!black} answers},
+    Crefname={\color{tcol_QUE!50!black} Answer}{\color{tcol_QUE!50!black} Answers}
+    ]{Answer}{Answer}{tbox_QUE_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_CONJ!50!black} conjecture}{\color{tcol_CONJ!50!black} conjectures},
+    Crefname={\color{tcol_CONJ!50!black} Conjecture}{\color{tcol_CONJ!50!black} Conjectures}
+    ]{conjecture}{Conjecture}{tbox_CONJ_style}{}
+
+\tcolorboxenvironment{proof}{boxrule=0pt,boxsep=0pt,blanker,
+    ncg left rule={0.5pt}{tcol_PRF}{8pt},right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{claim}{boxrule=0pt,boxsep=0pt,blanker,
+    ncg left rule={0.5pt}{tcol_CLM}{8pt},right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{subclaim}{boxrule=0pt,boxsep=0pt,blanker,
+    ncg left rule={0.5pt}{tcol_SUBCLM}{8pt},right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+% \tcolorboxenvironment{conjecture}{boxrule=0pt,boxsep=0pt,blanker,
+%     borderline west={2pt}{0pt}{tcol_CONJ},left=8pt,right=8pt,sharp corners,
+%     before skip=10pt,after skip=10pt,breakable
+% }
+\tcolorboxenvironment{remarks}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_REM},left=8pt,right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{motiv}{boxrule=0pt,boxsep=0pt,blanker,
+    ncg left rule={0.5pt}{tcol_MOT}{8pt},right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{examples}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_EXA},left=8pt,right=8pt,sharp corners,
+    before skip=10pt,after skip=10pt,breakable
+}
+
+\makeatletter
+\@namedef{tcolorboxshape@filingbox@ul}#1#2#3{
+    (frame.south west)--(title.north west)--([xshift=-\dimexpr#1\relax]title.north east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@uc}#1#2#3{
+    (frame.south west)--(frame.north west)--([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west) to[out=0,in=180] ([xshift=\dimexpr#1\relax]title.north west)--([xshift=-\dimexpr#1\relax]title.north east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@ur}#1#2#3{
+    (frame.south east)--(title.north east)--([xshift=\dimexpr#1\relax]title.north west) to[out=180,in=0] ([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west)--(frame.north west)--(frame.south west)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@dl}#1#2#3{
+    (frame.north west)--(title.south west)--([xshift=-\dimexpr#1\relax]title.south east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@dc}#1#2#3{
+    (frame.north west)--(frame.south west)--([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west) to[out=0,in=180] ([xshift=\dimexpr#1\relax]title.south west)--([xshift=-\dimexpr#1\relax]title.south east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@dr}#1#2#3{
+    (frame.north east)--(title.south east)--([xshift=\dimexpr#1\relax]title.south west) to[out=180,in=0] ([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west)--(frame.south west)--(frame.north west)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@ul}#1#2#3{
+    (frame.south west)--(title.north west)--([xshift=-\dimexpr#1\relax]title.north east)--([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@uc}#1#2#3{
+    (frame.south west)--(frame.north west)--([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west)--([xshift=\dimexpr#1\relax]title.north west)--([xshift=-\dimexpr#1\relax]title.north east)--([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@ur}#1#2#3{
+    (frame.south east)--(title.north east)--([xshift=\dimexpr#1\relax]title.north west)--([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west)--(frame.north west)--(frame.south west)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@dl}#1#2#3{
+    (frame.north west)--(title.south west)--([xshift=-\dimexpr#1\relax]title.south east)--([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@dc}#1#2#3{
+    (frame.north west)--(frame.south west)--([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west)--([xshift=\dimexpr#1\relax]title.south west)--([xshift=-\dimexpr#1\relax]title.south east)--([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@dr}#1#2#3{
+    (frame.north east)--(title.south east)--([xshift=\dimexpr#1\relax]title.south west)--([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west)--(frame.south west)--(frame.north west)--cycle
+}
+\newcommand{\TColorBoxShape}[2]{\expandafter\ifx\csname tcolorboxshape@#1@#2\endcsname\relax
+\expandafter\@gobble\else
+\csname tcolorboxshape@#1@#2\expandafter\endcsname
+\fi}
+\makeatother
+
+\tcbset{ % Styles for filingbox, railingbox and flagbox environments
+% Adapted from https://tex.stackexchange.com/questions/587912/tcolorbox-custom-title-box-style
+filingstyle/ul/.style 2 args={
+    attach boxed title to top left={yshift=-2mm},
+     breakable,
+    boxed title style={empty,top=0mm,bottom=1mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{ul}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{ul}{9pt}{18pt}{6pt};
+    }},
+filingstyle/uc/.style 2 args={
+    attach boxed title to top center={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{uc}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{uc}{9pt}{18pt}{6pt};
+    }},
+filingstyle/ur/.style 2 args={
+    attach boxed title to top right={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{ur}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{ur}{9pt}{18pt}{6pt};
+    }},
+filingstyle/dl/.style 2 args={
+    attach boxed title to bottom left={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{dl}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{dl}{9pt}{18pt}{6pt};
+    }},
+filingstyle/dc/.style 2 args={
+    attach boxed title to bottom center={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{dc}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{dc}{9pt}{18pt}{6pt};
+    }},
+filingstyle/dr/.style 2 args={
+    attach boxed title to bottom right={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{dr}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{dr}{9pt}{18pt}{6pt};
+    }},
+railingstyle/ul/.style 2 args={
+    attach boxed title to top left={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{ul}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{ul}{3pt}{12pt}{6pt};
+    }},
+railingstyle/uc/.style 2 args={
+    attach boxed title to top center={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{uc}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{uc}{3pt}{12pt}{6pt};
+    }},
+railingstyle/ur/.style 2 args={
+    attach boxed title to top right={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{ur}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{ur}{3pt}{12pt}{6pt};
+    }},
+railingstyle/dl/.style 2 args={
+    attach boxed title to bottom left={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{dl}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{dl}{3pt}{12pt}{6pt};
+    }},
+railingstyle/dc/.style 2 args={
+    attach boxed title to bottom center={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{dc}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{dc}{3pt}{12pt}{6pt};
+    }},
+railingstyle/dr/.style 2 args={
+    attach boxed title to bottom right={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{dr}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{dr}{3pt}{12pt}{6pt};
+    }},
+flagstyle/ul/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline west={0.5pt}{0pt}{#2},
+    attach boxed title to top left={yshift=-8pt,yshifttext=-8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    bottom=0mm
+    },
+flagstyle/ur/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline east={1pt}{0pt}{#2},
+    attach boxed title to top right={yshift=-8pt,yshifttext=-8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    bottom=0mm
+    },
+flagstyle/dl/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline west={0.5pt}{0pt}{#2},
+    attach boxed title to bottom left={yshift=8pt,yshifttext=8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    top=0mm
+    },
+flagstyle/dr/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline east={1pt}{0pt}{#2},
+    attach boxed title to bottom right={yshift=8pt,yshifttext=8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    top=0mm
+    }
+}
+
+% Box in the shape of a filing divider, position of tab can be ul (up left), uc (up center), ur (up right), dl (down left), dc (down center) or dr (down right). Default is ul (upper left)
+\NewTColorBox{filingbox}{ D(){ul} O{black} m O{} }{enhanced,
+    top=1mm,bottom=1mm,left=1mm,right=1mm,
+    title={#3},
+    fonttitle=\sffamily\bfseries,
+    coltitle=black,
+    filingstyle/#1={#2!10}{#2},
+    #4
+}
+
+% Box in the shape of a railing bar, position of tab can be ul (up left), uc (up center), ur (up right), dl (down left), dc (down center) or dr (down right). Default is ul (upper left)
+\NewTColorBox{railingbox}{ D(){ul} O{black} m O{} }{enhanced,
+    top=1mm,bottom=1mm,left=1mm,right=1mm,
+    title={#3},
+    fonttitle=\sffamily\bfseries,
+    coltitle=black,
+    railingstyle/#1={#2!10}{#2},
+    #4
+}
+
+% Box in the shape of a flag, position of tab can be ul (up left), ur (up right), dl (down left) or dr (down right). Default is ul (upper left)
+\NewTColorBox{flagbox}{ D(){ul} O{black} m O{} }{enhanced,breakable,
+    top=1mm,bottom=1mm,left=1mm,right=1mm,
+    title={#3},
+    fonttitle=\sffamily\bfseries,
+    coltitle=black,
+    flagstyle/#1={#2!10}{#2},
+    #4
+}
+
+\makeatletter
+\newcommand*{\CreateSmartLargeOperator}[2]{
+% Adapted from https://tex.stackexchange.com/questions/61598/new-command-with-cases-conditionals-if-thens/61600
+    % Plain operator (no customization)
+    \csdef{LargeOperator@#1@}{\csdef{LargeOperator@#1@Symbol}{\csuse{#1}}}
+    % Operator with limits above and below symbol
+    \csdef{LargeOperator@#1@l}{\csdef{LargeOperator@#1@Symbol}{\csuse{#1}\limits}}
+    % Operato with limits beside symbol
+    \csdef{LargeOperator@#1@n}{\csdef{LargeOperator@#1@Symbol}{\csuse{#1}\nolimits}}
+    % Inline style operator
+    \csdef{LargeOperator@#1@i}{\csdef{LargeOperator@#1@Symbol}{\textstyle\csuse{#1}}}
+    % Display style operator
+    \csdef{LargeOperator@#1@d}{\csdef{LargeOperator@#1@Symbol}{\displaystyle\csuse{#1}}}
+    % Inline style operator with limits above and below symbol
+    \csdef{LargeOperator@#1@il}{\csdef{LargeOperator@#1@Symbol}{\textstyle\csuse{#1}\limits}}
+    % Inline style operator with limits beside symbol
+    \csdef{LargeOperator@#1@in}{\csdef{LargeOperator@#1@Symbol}{\textstyle\csuse{#1}\nolimits}}
+    % Display style operator with limits above and below symbol
+    \csdef{LargeOperator@#1@dl}{\csdef{LargeOperator@#1@Symbol}{\displaystyle\csuse{#1}\limits}}
+    % Display style operator with limits beside symbol
+    \csdef{LargeOperator@#1@dn}{\csdef{LargeOperator@#1@Symbol}{\displaystyle\csuse{#1}\nolimits}}
+
+% NOTE: In the command below, ##1 denotes the operator. It is NOT to be used as an argument!
+\def\LargeOperatorSpecs@i##1,##2,##3,##4,##5,##6,##7\@nil{
+% If no arguments, operate over n from 1 to infinity
+    \ifx$##2$\csuse{LargeOperator@##1@Symbol}_{n=1}^{\infty}\else
+    % If one argument, operate over n from ##2 to infinity
+        \ifx$##3$\csuse{LargeOperator@##1@Symbol}_{n=##2}^{\infty}\else
+        % If two arguments, operate over n from ##2 to ##3
+            \ifx$##4$\csuse{LargeOperator@##1@Symbol}_{n=##2}^{##3}\else
+            % If three arguments, operate over ##2 from ##3 to ##4
+                \ifx$##5$\csuse{LargeOperator@##1@Symbol}_{##2=##3}^{##4}\else
+                % If four arguments, operate over ##2 and ##3 from ##4 to ##5
+                    \ifx$##6$\csuse{LargeOperator@##1@Symbol}_{##2,##3=##4}^{##5}\else
+                    % If five arguments, operate over ##2, ##3 and ##4 from ##5 to ##6
+                        \csuse{LargeOperator@##1@Symbol}_{##2,##3,##4=##5}^{##6}
+                    \fi
+                \fi
+            \fi
+        \fi
+    \fi
+}
+
+% Flexible "smart" large operator macro with comma-separated arguments and optional argument for formatting. Default is over n from 1 to infinity. Adapted from https://tex.stackexchange.com/a/15722
+\expandafter\DeclareDocumentCommand\csname#2\endcsname{ O{} m }{ % New operator macro
+\bgroup % Group created to keep operator style (e.g. \limits) local
+    \expandafter\ifx\csname LargeOperator@#1@##1\endcsname\relax
+    \expandafter\@gobble\else
+    \csname LargeOperator@#1@##1\expandafter\endcsname
+    \fi
+    \expandafter\LargeOperatorSpecs@i#1,##2,,,,,\@nil% % #1 stands in for the first "argument" of \LargeOperatorSpecs@i (the operator), the actual arguments are from ##2 onward
+\egroup}
+}
+\makeatother
+
+% Create the smart large operator #2 based on the large operator #1. For example, \CreateSmartLargeOperator{sum}{Sum} will define \Sum as the smart large operator based on \sum
+% Equivalent Unicode characters are given here (but they are NOT the same as the operators)
+\CreateSmartLargeOperator{sum}{Sum}             % Large: U+2211 ∑ (no small version)
+\CreateSmartLargeOperator{prod}{Prod}           % Small: U+2293 ⊓, Large: U+220F ∏
+\CreateSmartLargeOperator{coprod}{Coprod}       % Small: U+2294 ⊔, Large: U+2210 ∐
+\CreateSmartLargeOperator{bigcap}{Capp}         % Small: U+2229 ∩, Large: U+22C2 ⋂
+\CreateSmartLargeOperator{bigcup}{Cupp}         % Small: U+222A ∪, Large: U+22C3 ⋃
+\CreateSmartLargeOperator{bigsqcup}{Kupp}       % Small: U+2294 ⊔, Large: U+2210 ∐
+\CreateSmartLargeOperator{bigodot}{Odot}        % Small: U+2299 ⊙ (no large version)
+\CreateSmartLargeOperator{bigoplus}{Oplus}      % Small: U+2295 ⊕ (no large version)
+\CreateSmartLargeOperator{bigotimes}{Otimes}    % Small: U+2297 ⊗ (no large version)
+\CreateSmartLargeOperator{biguplus}{Uplus}      % Small: U+228E ⊎ (no large version)
+\CreateSmartLargeOperator{bigwedge}{Wedge}      % Small: U+2227 ∧, Large: U+22C0 ⋀
+\CreateSmartLargeOperator{bigvee}{Vee}          % Small: U+2228 ∨, Large: U+22C1 ⋁
+
+% \theoremstyle{mystyle}{\newtheorem*{Question}{Question}}
+
+% \tcolorboxenvironment{Question}{boxrule=0pt,boxsep=0pt,colback={blue!20},left=8pt,right=8pt,enhanced jigsaw, borderline west={2pt}{0pt}{gray},sharp corners,before skip=10pt,after skip=10pt,breakable}
+
+
+% align and align* environments with inline size
+\newenvironment{talign}{\let\displaystyle\textstyle\align}{\endalign}
+\newenvironment{talign*}{\let\displaystyle\textstyle\csname align*\endcsname}{\endalign}
+
+\usepackage[explicit]{titlesec}
+% Setting the format for sections, subsections and subsubsections
+\titleformat{\section}{\fontsize{17}{30}\sffamily\bfseries}{\thesection}{20pt}{#1}
+\titleformat{\subsection}{\fontsize{12}{18}\sffamily\bfseries}{\thesubsection}{12pt}{#1}
+\titleformat{\subsubsection}{\fontsize{10}{12}\sffamily\large\bfseries}{\thesubsubsection}{8pt}{#1}
+% Setting the spacing for sections, subsections and subsubsections
+% First argument is the left indent, second argument is the spacing above, third argument is the spacing below
+\titlespacing*{\section}{0pt}{5pt}{5pt}
+\titlespacing*{\subsection}{0pt}{5pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{5pt}{5pt}
+
+\newcommand{\Disp}{\displaystyle}
+\newcommand{\qe}{\hfill\(\bigtriangledown\)}
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\setlength{\parindent}{0.2in}
+\setlength{\parskip}{1in}
+\setlength{\columnseprule}{0pt}
+
+\makeatletter
+% Modify spacing above and below display equations
+\g@addto@macro\normalsize{
+    \setlength\abovedisplayskip{3pt}
+    \setlength\belowdisplayskip{3pt}
+    \setlength\abovedisplayshortskip{0pt}
+    \setlength\belowdisplayshortskip{0pt}
+}
+\makeatother
+
+\makeatletter
+% Redefining the title block
+\renewcommand\maketitle{
+\null % \vspace does not work with nothing above it, so \null is added
+\vspace{5mm}
+\begingroup % Creating a group to ensure col_stripes is only defined locally, i.e. only for the title
+\definecolor{col_stripes}{HTML}{000000} % Color of the stripes above and below the title components
+    \begin{tcolorbox}[enhanced,blanker,
+    borderline horizontal={2pt}{0pt}{col_stripes},
+    borderline horizontal={1pt}{-3.5pt}{col_stripes},
+    borderline horizontal={2pt}{-8pt}{col_stripes},
+    fontupper=\fontfamily{bch},
+    halign=flush center,top=10mm,bottom=10mm,after skip=20mm,
+    ]
+        {\fontsize{24}{28}\bfseries\selectfont\@title}\\
+            \vspace{6mm}
+        {\fontsize{20}{24}\selectfont\@author}\\
+            \vspace{6mm}
+        {\fontsize{16}{20}\selectfont\@date}
+    \end{tcolorbox}
+\endgroup}
+% Adapted from https://tex.stackexchange.com/questions/483953/how-to-add-new-macros-like-author-without-editing-latex-ltx?noredirect=1&lq=1
+\makeatother
+\usepackage{soul}
+\usepackage[clear-aux,use-files]{xsim}
+% ---------------------------------------------------------------------------
+% Speed patch for xsim (only applied to the xsim release dated 2022/02/12).
+% xsim's bookkeeping of exercise properties is quadratic in the number of
+% exercises: every time a property is set, it scans every recorded entry of
+% that property, and its list updates use \seq_if_in / \seq_gremove_duplicates.
+% With ~500 exercises this costs several minutes per run. The replacements
+% below keep exactly the same behaviour but use hash (csname) look-ups.
+% ---------------------------------------------------------------------------
+\ExplSyntaxOn
+\str_if_eq:VnT \c_xsim_date_tl {2022/02/12}
+  {
+    % Index: for property #3 and exercise #1-#2, the list entry currently stored.
+    \cs_new:Npn \__ncgfix_xsim_index:nnn #1#2#3
+      { g__ncgfix_xsim_index_ \tl_to_str:n {#3::#1-#2} _str }
+
+    % Remove the (unique) list entry of property #3 belonging to exercise #1-#2.
+    \cs_gset_protected:Npn \__xsim_remove_property_from_list:nnn #1#2#3
+      {
+        \str_if_exist:cT { \__ncgfix_xsim_index:nnn {#1} {#2} {#3} }
+          {
+            \xsim_remove_from_list:nv {#3}
+              { \__ncgfix_xsim_index:nnn {#1} {#2} {#3} }
+            \cs_undefine:c { \__ncgfix_xsim_index:nnn {#1} {#2} {#3} }
+          }
+      }
+    \cs_generate_variant:Nn \xsim_remove_from_list:nn {nv}
+    \str_new:N \l__ncgfix_xsim_str
+
+    % Same as the original, plus recording the new entry in the index.
+    \cs_gset_protected:Npn \__xsim_set_property:nnnn #1#2#3#4
+      {
+        \xsim_verbose:n
+          {
+            Setting~ property~ `#3'~ of~ exercise~ type~ `#1'~ id~ `#2'~ to~
+            value~ `#4'.
+          }
+        \xsim_if_property_noupdate:nF {#3}
+          {
+            % If the list already holds exactly this entry there is nothing
+            % to do (the original removed it and appended it again, which
+            % only changes the order of entries, not their content).
+            \str_set:Nn \l__ncgfix_xsim_str {#1-#2=={#4}}
+            \str_if_exist:cTF { \__ncgfix_xsim_index:nnn {#1} {#2} {#3} }
+              {
+                \str_if_eq:eeF
+                  { \use:c { \__ncgfix_xsim_index:nnn {#1} {#2} {#3} } }
+                  { \l__ncgfix_xsim_str }
+                  {
+                    \__xsim_remove_property_from_list:nnn {#1} {#2} {#3}
+                    \xsim_add_to_list:nn {#3} {#1-#2=={#4}}
+                  }
+              }
+              {
+                % not indexed yet: either the entry was read from the aux
+                % file (then it is already in the list) or it is new
+                \xsim_attribute_if_set:nnF {#3} {#1-#2=={#4}}
+                  { \xsim_add_to_list:nn {#3} {#1-#2=={#4}} }
+              }
+            \str_gset_eq:cN { \__ncgfix_xsim_index:nnn {#1} {#2} {#3} }
+              \l__ncgfix_xsim_str
+          }
+        \xsim_attribute_set:nnn {#1!#2} {#3} {#4}
+      }
+
+    % Membership is tracked by the attribute xsim already keeps for every
+    % list entry, so no linear \seq_if_in search is needed.
+    \cs_gset_protected:Npn \xsim_add_to_list:nn #1#2
+      {
+        \xsim_verbose:n { Adding~ `#2'~ to~ list~ `#1'. }
+        \str_set:Nn \l__xsim_tmpa_str {#2}
+        \xsim_attribute_if_set:nnT {#1} {#2}
+          { \seq_gremove_all:cV {g__xsim_list_#1_seq} \l__xsim_tmpa_str }
+        \xsim_attribute_set:nnn {#1} {#2} {}
+        \seq_gput_right:cV {g__xsim_list_#1_seq} \l__xsim_tmpa_str
+      }
+    \cs_gset_protected:Npn \xsim_remove_from_list:nn #1#2
+      {
+        \xsim_verbose:n { Removing~ `#2'~ to~ list~ `#1'. }
+        \str_set:Nn \l__xsim_tmpa_str {#2}
+        \xsim_attribute_if_set:nnT {#1} {#2}
+          {
+            \xsim_attribute_unset:nn {#1} {#2}
+            \seq_gremove_all:cV {g__xsim_list_#1_seq} \l__xsim_tmpa_str
+          }
+      }
+
+    % Duplicate removal (keeps first occurrences, like \seq_gremove_duplicates:N).
+    % A hash-based scan first checks whether there are any duplicates at all
+    % (normally there are none); only then is the sequence rebuilt.
+    \bool_new:N \g__ncgfix_xsim_dup_bool
+    \cs_new_protected:Npn \__ncgfix_xsim_gremove_duplicates:c #1
+      {
+        \bool_gset_false:N \g__ncgfix_xsim_dup_bool
+        \group_begin:
+          \seq_map_inline:cn {#1}
+            {
+              \cs_if_exist:cTF { __ncgfix_xsim_seen_ \tl_to_str:n {##1} }
+                {
+                  \bool_gset_true:N \g__ncgfix_xsim_dup_bool
+                  \seq_map_break:
+                }
+                { \cs_set:cpn { __ncgfix_xsim_seen_ \tl_to_str:n {##1} } { } }
+            }
+        \group_end:
+        \bool_if:NT \g__ncgfix_xsim_dup_bool
+          { \seq_gremove_duplicates:c {#1} }
+      }
+    \cs_generate_variant:Nn \__ncgfix_xsim_index:nnn {VVn}
+    \cs_gset_protected:Npn \xsim_set_list:n #1
+      {
+        \seq_gset_eq:cc {g__xsim_list_recorded_#1_seq} {g__xsim_list_#1_seq}
+        \__ncgfix_xsim_gremove_duplicates:c {g__xsim_list_recorded_#1_seq}
+        % index the entries of property lists read from the aux file
+        \xsim_if_property_exist:nT {#1}
+          {
+            \seq_map_inline:cn {g__xsim_list_#1_seq}
+              {
+                \__xsim_extract_property_list_entry:NNNwww
+                  \l__xsim_tmpa_str \l__xsim_tmpb_str \l__xsim_tmpc_str ##1 \q_stop
+                \str_gset:cn
+                  { \__ncgfix_xsim_index:VVn \l__xsim_tmpa_str \l__xsim_tmpb_str {#1} }
+                  {##1}
+              }
+          }
+      }
+    \cs_gset_protected:Npn \xsim_update_list:n #1
+      {
+        \xsim_verbose:n { Updating~ list~ `#1'. }
+        \__ncgfix_xsim_gremove_duplicates:c {g__xsim_list_#1_seq}
+        \__ncgfix_xsim_gremove_duplicates:c {g__xsim_list_recorded_#1_seq}
+        \str_set:Nx \l__xsim_tmpa_str
+          { \seq_use:cn {g__xsim_list_#1_seq} {} }
+        \str_set:Nx \l__xsim_tmpb_str
+          { \seq_use:cn {g__xsim_list_recorded_#1_seq} {} }
+        \str_if_eq:NNF \l__xsim_tmpa_str \l__xsim_tmpb_str
+          { \xsim_rerun: }
+        \bool_if:NF \l__xsim_empty_lists_bool
+          {
+            \xsim_add_property_to_aux:nn {#1}
+              { { \seq_use:cV {g__xsim_list_#1_seq} \l__xsim_split_aux_lists_str } }
+          }
+      }
+  }
+\ExplSyntaxOff
+
+% Defining boolean variables to handle different solution-printing configurations (no solutions, solutions in-place only, solutions at the end only, solutions in-place and at the end)
+\newif\ifPrintSolutionsInPlace
+\newif\ifPrintSolutionsAtEnd
+\newif\ifCallToPrintSolutions
+
+%%% TOGGLE THESE TWO BOOLEAN VARIABLES FOR DIFFERENT SOLUTION-PRINTING CONFIGURATIONS %%%
+%\PrintSolutionsInPlacetrue  % If true, solutions will be printed in-place
+\PrintSolutionsAtEndtrue    % If true, solutions will be printed at the end
+
+\CallToPrintSolutionsfalse  % This MUST (initially) be set to false, it will be automatically switched to true at the end if necessary, i.e. if solutions are to be printed there
+
+\colorlet{exercise_col}{blue} % Color for exercise and solution hyperlinks, as well as cross-references
+
+\xsimsetup{
+    % exercise/the-counter=\thechapter.\thesection.\arabic{exercise}, % Include chapter and section in exercise numbers, e.g. 1.2.1, 1.2.2, 1.2.3
+    exercise/within=section, % Number exercises within section
+}
+% Exercise and solution bodies are written to the folder xsim-files/ (it contains
+% a README.md that marks it). If that folder is missing, they go to the current folder.
+\IfFileExists{xsim-files/README.md}{\xsimsetup{path=xsim-files}}{}
+
+\ifPrintSolutionsInPlace
+    \xsimsetup{solution/print=true}
+\else
+    \xsimsetup{solution/print=false}
+\fi
+
+% Declare a boolean property:
+% \DeclareExerciseProperty*{short}
+% Declare a tag-like property:
+% \DeclareExerciseTagging{level}
+\DeclareExerciseProperty{star}
+\DeclareExerciseProperty{exc}
+
+% The enhanced (TikZ) exercise box is only needed when an exercise carries a
+% `star' or `exc' marker, which are drawn as an overlay. All other exercises use
+% the visually identical, much faster standard-skin box (see `ncg left rule').
+\tcbset{
+  ncg exercise fancy/.style={
+    enhanced jigsaw, borderline west={0.5pt}{0pt}{black},
+    overlay unbroken and first={
+        \GetExercisePropertyT{star}{ %If the
+            \node[anchor=center,xshift=5pt,yshift=-3.5pt] at (frame.north west) {
+                % If star=1, print one star
+                \ifnum\PropertyValue=1 $\star$ \else
+                % If star=2, print two stars
+                \ifnum\PropertyValue=2 $\star\star$ \else
+                % If star=3, print the symbol \triplestar (three stars)
+                \ifnum\PropertyValue=3 \triplestar \else
+                % If star=4, print the symbol \quadruplestar (four stars)
+                \ifnum\PropertyValue=4 \quadruplestar \else
+                % Otherwise, print the value in a black ball
+                \tikz{\shade[ball color=black] (0,0) circle (6pt) node[white,font=\sffamily\bfseries]{\PropertyValue};}
+                \fi\fi\fi\fi
+            };
+        }
+        \GetExercisePropertyT{exc}{
+            \node[anchor=north east,xshift=10.5pt,yshift=3.5pt] at (frame.north west) {\color{blue!60!black}\bfseries!};
+        }
+    }},
+  ncg exercise fast/.style={ncg left rule filled={0.5pt}{black}{12pt}{white}},
+}
+
+% declare a template which typesets exercises differently according to given
+% properties:
+\DeclareExerciseEnvironmentTemplate{exercise}
+{% Code before exercise
+    % \renewcommand*\theenumi{\theexercise.\arabic{enumi}} %To show the exercise number in enumerate lists (e.g. 4.1,4.2,4.3 instead of 1,2,3)
+    % To print "Exercise" (or whatever the name of the environment is), type \XSIMmixedcase{\GetExerciseName}~
+    \IfExercisePropertySetTF{star}
+      {\tcbset{ncg exercise skin/.style={ncg exercise fancy}}}
+      {\IfExercisePropertySetTF{exc}
+        {\tcbset{ncg exercise skin/.style={ncg exercise fancy}}}
+        {\tcbset{ncg exercise skin/.style={ncg exercise fast}}}}%
+    \tcolorbox[boxrule=0pt,boxsep=0pt,colback=white,
+    top=0pt,bottom=0pt,left=12pt,right=8pt,
+    label={exercise_identifier:\ExerciseID}, % Label the exercise (Note: \ExerciseID is a single number, i.e. 1,2,3, etc, NOT 1.1.1, 1.1.2, etc)
+    sharp corners,before skip=10pt,after skip=10pt,breakable,
+    ncg exercise skin]
+    \begingroup
+    \sffamily\selectfont
+        \ifPrintSolutionsAtEnd
+            % If solutions are to be printed at the end, print the exercise number, hyperlinked to the solution
+            \hyperref[solution_identifier:\ExerciseID]{{\color{exercise_col}\bfseries Ex. \GetExerciseProperty{counter}}}%
+            \GetExercisePropertyT{subtitle}{ (\PropertyValue)}% Print the subtitle, if any
+            {\color{exercise_col}\bfseries.}
+        \else
+            % Otherwise, print the exercise number with no hyperlink
+            {\bfseries Ex. \GetExerciseProperty{counter}}%
+            \GetExercisePropertyT{subtitle}{ (\PropertyValue)}% Print the subtitle, if any
+            {\bfseries.}
+        \fi
+    \endgroup
+}
+{% Code after exercise
+    \endtcolorbox
+}
+
+
+% declare a tcolorbox template for the solutions:
+\DeclareExerciseEnvironmentTemplate{solution}
+{% Code before exercise
+    % \renewcommand*\theenumi{\theexercise.\arabic{enumi}} %To show the exercise number in enumerate lists (e.g. 4.1,4.2,4.3 instead of 1,2,3)
+    \tcolorbox[boxrule=0pt,boxsep=0pt,colback=white,
+    top=0pt,bottom=0pt,left=12pt,right=8pt,
+    ncg left rule filled={0.5pt}{black}{12pt}{white},
+    % Label the solution depending on whether \CallToPrintSolutions is true, i.e. whether we have reached the end of the main body or not
+    % Note: \ExerciseID is a single number, i.e. 1,2,3, etc, NOT 1.1.1, 1.1.2, etc
+    label={\ifCallToPrintSolutions
+        solution_identifier:\ExerciseID         % If we are at the end
+    \else
+        inplace_solution_identifier:\ExerciseID %If we are not at the end
+    \fi},
+    sharp corners,before skip=10pt,after skip=10pt,breakable]
+    \begingroup
+    \sffamily\bfseries\selectfont
+        \ifCallToPrintSolutions
+            % If solutions are to be printed at the end AND we are at the end, print the solution number, hyperlinked to the exercise
+            \hyperref[exercise_identifier:\ExerciseID]{\color{exercise_col}\bfseries Proof. \GetExerciseProperty{counter}}%
+            {\color{exercise_col}.}
+        \else
+            % Otherwise, print the solution number with no hyperlink
+            Proof. \GetExerciseProperty{counter}.
+        \fi
+    \endgroup
+}
+{% Code after exercise
+    \endtcolorbox
+}
+
+
+\crefformat{exercise}{\normalfont\bfseries\color{exercise_col} #2exercise #1#3}
+\crefrangeformat{exercise}{\normalfont\bfseries\color{exercise_col} #3exercises #1#4 {\normalfont\color{black}and} #5#2#6}
+\Crefformat{exercise}{\normalfont\bfseries\color{exercise_col} #2Ex. #1#3}
+\Crefrangeformat{exercise}{\normalfont\bfseries\color{exercise_col} #3Exercises #1#4 {\normalfont\color{black}and} #5#2#6}
+
+\crefformat{solution}{\normalfont\bfseries\color{exercise_col} #2solution #1#3}
+\crefrangeformat{solution}{\normalfont\bfseries\color{exercise_col} #3solutions #1#4 {\normalfont\color{black}and} #5#2#6}
+\Crefformat{solution}{\normalfont\bfseries\color{exercise_col} #2Proof #1#3}
+\Crefrangeformat{solution}{\normalfont\bfseries\color{exercise_col} #3Solutions #1#4 {\normalfont\color{black}and} #5#2#6}
+
+% Custom \printsolutions command that prints the chapter/section headings before the exercises of each chapter/section
+% Adapted from https://tex.stackexchange.com/a/577008
+\renewcommand\printsolutions{
+    \def\currentchapter{}
+    \def\currentsection{}
+    \def\lastchapter{}
+    \def\lastsection{}
+    \ForEachUsedExerciseByType{
+        \let\lastchapter\currentchapter
+        \let\lastsection\currentsection
+        \edef\currentchapter{\ExercisePropertyGet{##1}{##2}{chapter-value}}
+        \edef\currentsection{\ExercisePropertyGet{##1}{##2}{section-value}}
+        \ifx\lastchapter\currentchapter\else
+            \subsection*{Chapter \ExercisePropertyGet{##1}{##2}{chapter}}
+        \fi
+        \ifx\lastsection\currentsection\else
+            \subsubsection*{Section \ExercisePropertyGet{##1}{##2}{section}}
+        \fi
+        \XSIMprint{solution}{##1}{##2}
+    }
+}
+
+% setup exercises and solutions:
+\SetExerciseParameters{exercise}{
+    exercise-template=exercise,
+    solution-template=solution
+}
+
+ \usetikzlibrary{calc,shapes.callouts,shapes.arrows}
+ \newcommand{\bubblethis}[2]{
+\tikz[remember picture,baseline]{\node[anchor=base,inner sep=0,outer sep=0]%
+(#1) {#1};\node[overlay,cloud callout,callout relative pointer={(-0.2cm,-0.2cm)},%
+aspect=1.5,fill=yellow!90] at ($(#1.north)+(0.8cm,0.4cm)$) {#2};}%
+}%
+
+\newcommand{\bubble}[3]{
+\tikz[remember picture,baseline]{\node[anchor=base,inner sep=0,outer sep=0] %
+(#1)  {#1};\node[overlay,cloud callout,callout relative pointer= {(0.2cm,-0.4cm)},aspect=2.5,fill=red] at($(#1.north)+(-0.5cm,1.6cm)$) {#2};\node[overlay,cloud callout, callout relative pointer={((-0.4,-0.3))},aspect=3,fill=green] at($(#1.north)+(2cm,4cm)$) {#3};}
+
+
+}
+
+
+\tcbset{
+%%%%%% HALF frame corner styles (produces half a corner) %%%%%%
+    % North West frame corner - Left segment only
+    frame corner northwest left/.style n args={5}{
+        frame code app={
+            \shade[top color={#4},bottom color={#5}]
+                ([xshift={-#3},yshift={-#1}]frame.north west)
+                --++(0,{#1+#3})
+                --++({#2},{-#2})
+                --++(0,{-#1+#2-#3})
+                --cycle;
+        }
+    },
+    % North West frame corner - Top segment only
+    frame corner northwest top/.style n args={5}{
+        frame code app={
+            \shade[left color={#4},right color={#5}]
+                ([xshift={#1},yshift={#3}]frame.north west)
+                --++({-#1-#3},0)
+                --++({#2},{-#2})
+                --++({#1-#2+#3},0)
+                --cycle;
+        }
+    },
+    % North East frame corner - Right segment only
+    frame corner northeast right/.style n args={5}{
+        frame code app={
+            \shade[top color={#4},bottom color={#5}]
+                ([xshift={#3},yshift={-#1}]frame.north east)
+                --++(0,{#1+#3})
+                --++({-#2},{-#2})
+                --++(0,{-#1+#2-#3})
+                --cycle;
+        }
+    },
+    % North East frame corner - Top segment only
+    frame corner northeast top/.style n args={5}{
+        frame code app={
+            \shade[right color={#4},left color={#5}]
+                ([xshift={-#1},yshift={#3}]frame.north east)
+                --++({#1+#3},0)
+                --++({-#2},{-#2})
+                --++({-#1+#2-#3},0)
+                --cycle;
+        }
+    },
+    % South West frame corner - Left segment only
+    frame corner southwest left/.style n args={5}{
+        frame code app={
+            \shade[bottom color={#4},top color={#5}]
+                ([xshift={-#3},yshift={#1}]frame.south west)
+                --++(0,{-#1-#3})
+                --++({#2},{#2})
+                --++(0,{#1-#2+#3})
+                --cycle;
+        }
+    },
+    % South West frame corner - Bottom segment only
+    frame corner southwest bottom/.style n args={5}{
+        frame code app={
+            \shade[left color={#4},right color={#5}]
+                ([xshift={#1},yshift={-#3}]frame.south west)
+                --++({-#1-#3},0)
+                --++({#2},{#2})
+                --++({#1-#2+#3},0)
+                --cycle;
+        }
+    },
+    % South East frame corner - Right segment only
+    frame corner southeast right/.style n args={5}{
+        frame code app={
+            \shade[bottom color={#4},top color={#5}]
+                ([xshift={#3},yshift={#1}]frame.south east)
+                --++(0,{-#1-#3})
+                --++({-#2},{#2})
+                --++(0,{#1-#2+#3})
+                --cycle;
+        }
+    },
+    % South East frame corner - Bottom segment only
+    frame corner southeast bottom/.style n args={5}{
+        frame code app={
+            \shade[right color={#4},left color={#5}]
+                ([xshift={-#1},yshift={-#3}]frame.south east)
+                --++({#1+#3},0)
+                --++({-#2},{#2})
+                --++({-#1+#2-#3},0)
+                --cycle;
+        }
+    },
+}
+
+\tcbset{
+%%%%%% FULL frame corner styles (produces a full corner) %%%%%%
+    % North West frame corner - Both segments (left and top)
+    frame corners northwest/.style n args={5}{
+        frame corner northwest left={#1}{#2}{#3}{#4}{#5},
+        frame corner northwest top={#1}{#2}{#3}{#4}{#5},
+    },
+    % North East frame corner - Both segments (right and top)
+    frame corners northeast/.style n args={5}{
+        frame corner northeast right={#1}{#2}{#3}{#4}{#5},
+        frame corner northeast top={#1}{#2}{#3}{#4}{#5},
+    },
+    % South West frame corner - Both segments (left and bottom)
+    frame corners southwest/.style n args={5}{
+        frame corner southwest left={#1}{#2}{#3}{#4}{#5},
+        frame corner southwest bottom={#1}{#2}{#3}{#4}{#5},
+    },
+    % South East frame corner - Both segments (right and bottom)
+    frame corners southeast/.style n args={5}{
+        frame corner southeast right={#1}{#2}{#3}{#4}{#5},
+        frame corner southeast bottom={#1}{#2}{#3}{#4}{#5},
+    },
+%%%%%% DOUBLE frame corner styles (produces two full corners) %%%%%%
+    % North frame corners (North West and North East)
+    frame corners north/.style n args={5}{
+        frame corners northwest={#1}{#2}{#3}{#4}{#5},
+        frame corners northeast={#1}{#2}{#3}{#4}{#5},
+    },
+    % South frame corners (South West and South East)
+    frame corners south/.style n args={5}{
+        frame corners southwest={#1}{#2}{#3}{#4}{#5},
+        frame corners southeast={#1}{#2}{#3}{#4}{#5},
+    },
+    % West frame corners (North West and South West)
+    frame corners west/.style n args={5}{
+        frame corners northwest={#1}{#2}{#3}{#4}{#5},
+        frame corners southwest={#1}{#2}{#3}{#4}{#5},
+    },
+    % East frame corners (North East and South East)
+    frame corners east/.style n args={5}{
+        frame corners northeast={#1}{#2}{#3}{#4}{#5},
+        frame corners southeast={#1}{#2}{#3}{#4}{#5},
+    },
+    % Downhill frame corners (North West and South East)
+    frame corners downhill/.style n args={5}{
+        frame corners northwest={#1}{#2}{#3}{#4}{#5},
+        frame corners southeast={#1}{#2}{#3}{#4}{#5},
+    },
+    % Uphill frame corners (South West and North East)
+    frame corners uphill/.style n args={5}{
+        frame corners southwest={#1}{#2}{#3}{#4}{#5},
+        frame corners northeast={#1}{#2}{#3}{#4}{#5},
+    },
+%%%%%% QUADRUPLE frame corner style (produces all four full corners) %%%%%%
+    % Uphill frame corners (South West and North East)
+    frame corners all/.style n args={5}{
+        frame corners northwest={#1}{#2}{#3}{#4}{#5},
+        frame corners northeast={#1}{#2}{#3}{#4}{#5},
+        frame corners southwest={#1}{#2}{#3}{#4}{#5},
+        frame corners southeast={#1}{#2}{#3}{#4}{#5},
+    },
+}
+
+\tcbset{
+%%%%%% HALF frame rounded corner styles (produces half a corner) %%%%%%
+    % North West frame rounded corner - Left segment only
+    frame rounded corner northwest left/.style n args={6}{
+        frame code app={
+            \shade[top color={#5},bottom color={#6}]
+                ([xshift={-#3},yshift={-#1}]frame.north west)
+                --++(0,{#1+#3-#4})
+                arc(180:135:{#4})
+                --++({#2},{-#2})
+                arc(135:180:{#4-sqrt(2)*#2})
+                --++(0,{-#1-#3+#4})
+                --cycle;
+        }
+    },
+    % North West frame rounded corner - Top segment only
+    frame rounded corner northwest top/.style n args={6}{
+        frame code app={
+            \shade[left color={#5},right color={#6}]
+                ([xshift={#1},yshift={#3}]frame.north west)
+                --++({-#1-#3+#4},0)
+                arc(90:135:{#4})
+                --++({#2},{-#2})
+                arc(135:90:{#4-sqrt(2)*#2})
+                --++({#1+#3-#4},0)
+                --cycle;
+        }
+    },
+    % North East frame rounded corner - Right segment only
+    frame rounded corner northeast right/.style n args={6}{
+        frame code app={
+            \shade[top color={#5},bottom color={#6}]
+                ([xshift={#3},yshift={-#1}]frame.north east)
+                --++(0,{#1+#3-#4})
+                arc(0:45:{#4})
+                --++({-#2},{-#2})
+                arc(45:0:{#4-sqrt(2)*#2})
+                --++(0,{-#1-#3+#4})
+                --cycle;
+        }
+    },
+    % North East frame rounded corner - Top segment only
+    frame rounded corner northeast top/.style n args={6}{
+        frame code app={
+            \shade[right color={#5},left color={#6}]
+                ([xshift={-#1},yshift={#3}]frame.north east)
+                --++({#1+#3-#4},0)
+                arc(90:45:{#4})
+                --++({-#2},{-#2})
+                arc(45:90:{#4-sqrt(2)*#2})
+                --++({-#1-#3+#4},0)
+                --cycle;
+        }
+    },
+    % South West frame rounded corner - Left segment only
+    frame rounded corner southwest left/.style n args={6}{
+        frame code app={
+            \shade[bottom color={#5},top color={#6}]
+                ([xshift={-#3},yshift={#1}]frame.south west)
+                --++(0,{-#1-#3+#4})
+                arc(-180:-135:{#4})
+                --++({#2},{#2})
+                arc(-135:-180:{#4-sqrt(2)*#2})
+                --++(0,{#1+#3-#4})
+                --cycle;
+        }
+    },
+    % South West frame rounded corner - Bottom segment only
+    frame rounded corner southwest bottom/.style n args={6}{
+        frame code app={
+            \shade[left color={#5},right color={#6}]
+                ([xshift={#1},yshift={-#3}]frame.south west)
+                --++({-#1-#3+#4},0)
+                arc(-90:-135:{#4})
+                --++({#2},{#2})
+                arc(-135:-90:{#4-sqrt(2)*#2})
+                --++({#1+#3-#4},0)
+                --cycle;
+        }
+    },
+    % South East frame rounded corner - Right segment only
+    frame rounded corner southeast right/.style n args={6}{
+        frame code app={
+            \shade[bottom color={#5},top color={#6}]
+                ([xshift={#3},yshift={#1}]frame.south east)
+                --++(0,{-#1-#3+#4})
+                arc(0:-45:{#4})
+                --++({-#2},{#2})
+                arc(-45:0:{#4-sqrt(2)*#2})
+                --++(0,{#1+#3-#4})
+                --cycle;
+        }
+    },
+    % South East frame rounded corner - Bottom segment only
+    frame rounded corner southeast bottom/.style n args={6}{
+        frame code app={
+            \shade[right color={#5},left color={#6}]
+                ([xshift={-#1},yshift={-#3}]frame.south east)
+                --++({#1+#3-#4},0)
+                arc(-90:-45:{#4})
+                --++({-#2},{#2})
+                arc(-45:-90:{#4-sqrt(2)*#2})
+                --++({-#1-#3+#4},0)
+                --cycle;
+        }
+    },
+}
+
+\tcbset{
+%%%%%% FULL frame rounded corner styles (produces a full corner) %%%%%%
+    % North West frame rounded corner - Both segments (left and top)
+    frame rounded corners northwest/.style n args={6}{
+        frame rounded corner northwest left={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corner northwest top={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % North East frame rounded corner - Both segments (right and top)
+    frame rounded corners northeast/.style n args={6}{
+        frame rounded corner northeast right={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corner northeast top={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % South West frame rounded corner - Both segments (left and bottom)
+    frame rounded corners southwest/.style n args={6}{
+        frame rounded corner southwest left={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corner southwest bottom={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % South East frame rounded corner - Both segments (right and bottom)
+    frame rounded corners southeast/.style n args={6}{
+        frame rounded corner southeast right={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corner southeast bottom={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+%%%%%% DOUBLE frame rounded corner styles (produces two full corners) %%%%%%
+    % North frame rounded corners (North West and North East)
+    frame rounded corners north/.style n args={6}{
+        frame rounded corners northwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners northeast={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % South frame rounded corners (South West and South East)
+    frame rounded corners south/.style n args={6}{
+        frame rounded corners southwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners southeast={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % West frame rounded corners (North West and South West)
+    frame rounded corners west/.style n args={6}{
+        frame rounded corners northwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners southwest={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % East frame rounded corners (North East and South East)
+    frame rounded corners east/.style n args={6}{
+        frame rounded corners northeast={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners southeast={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % Downhill frame rounded corners (North West and South East)
+    frame rounded corners downhill/.style n args={6}{
+        frame rounded corners northwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners southeast={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+    % Uphill frame rounded corners (South West and North East)
+    frame rounded corners uphill/.style n args={6}{
+        frame rounded corners southwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners northeast={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+%%%%%% QUADRUPLE frame rounded corner style (produces all four full corners) %%%%%%
+    % Uphill frame rounded corners (South West and North East)
+    frame rounded corners all/.style n args={6}{
+        frame rounded corners northwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners northeast={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners southwest={#1}{#2}{#3}{#4}{#5}{#6},
+        frame rounded corners southeast={#1}{#2}{#3}{#4}{#5}{#6},
+    },
+}
+
+
+
+
+
+
+\usepackage{pgf-pie}
+
+% \newtcolorbox{proofstrategy}[2][]{%
+%   enhanced,
+%   breakable,
+%   boxsep=3pt,
+%   arc=1.25ex,
+%   colback=white,
+%   colframe=RoyalPurple,
+%   boxrule=3pt,
+%   leftrule=18pt,
+%   overlay unbroken and first ={%
+%     \node[rotate=90,
+%           minimum width=1cm,
+%           anchor=south,
+%           font=\large\sffamily\bfseries,
+%           yshift=-18pt,
+%           white]
+%     at (frame.west) {#2};
+%   }
+% }
+
+
+
+
+\usepackage[explicit]{titlesec}
+\titleformat{\section}{\normalfont\sffamily\Large\bfseries}{\thesection}{12pt}{#1}
+
+
+
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{0pt}
+\setlength{\columnseprule}{0pt}
+\newcommand{\ind}{\hspace{0.2in}} % override the indent setting
+
+\makeatletter
+\g@addto@macro\normalsize{
+\setlength\abovedisplayskip{3pt}
+\setlength\belowdisplayskip{3pt}
+\setlength\abovedisplayshortskip{0pt}
+\setlength\belowdisplayshortskip{0pt}}
+\makeatother
+
+\makeatletter
+% Redefining the title block
+\renewcommand\maketitle{
+    \null\vspace{6mm}
+    \begin{center}
+        {\Huge\sffamily\bfseries\selectfont\@title}\\
+            \vspace{6mm}
+        {\Large\sffamily\selectfont\@author}\\
+            \vspace{6mm}
+        {\large\sffamily\selectfont\@date}
+    \end{center}
+    \vspace{6mm}
+}
+% Adapted from https://tex.stackexchange.com/questions/483953/how-to-add-new-macros-like-author-without-editing-latex-ltx?noredirect=1&lq=1
+\makeatother
+
+\newtcolorbox{contents}[2][]{enhanced, breakable,
+before skip=2mm,after skip=2mm,
+colback=black!5,colframe=black!50,boxrule=0.2mm,
+attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight},
+varwidth boxed title*=-3cm,
+boxed title style={frame code={
+\path[fill=tcbcolback!30!black]
+([yshift=-1mm,xshift=-1mm]frame.north west)
+arc[start angle=0,end angle=180,radius=1mm]
+([yshift=-1mm,xshift=1mm]frame.north east)
+arc[start angle=180,end angle=0,radius=1mm];
+\path[left color=tcbcolback!60!black,right color=tcbcolback!60!black,
+middle color=tcbcolback!80!black]
+([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east)
+[rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+-- (frame.south east) -- (frame.south west)
+-- ([xshift=-1mm,yshift=-1mm]frame.north west)
+[sharp corners]-- cycle;
+},interior engine=empty,
+},
+fonttitle=\bfseries,
+title={#2},#1}
+
+\usepackage{pgf-pie}
+
+\begin{document}
+
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+
+
+\setlength{\parskip}{0pt}
+\setlength{\columnseprule}{0pt}
+
+
+\setlength{\parindent}{0em}
+
+\end{document}
