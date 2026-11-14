@@ -1,5 +1,16 @@
 \documentclass[preamble.tex]{subfiles}
 
+
+\newcommand{\PreOrdVect}{\text{PreOrdVec}}
+\newcommand{\ArchOrdVect}{\prescript{}{\text{arch}}{\text{OrdVec}}}
+\newcommand{\UniOrdVect}{\prescript{1}{}{\text{OrdVec}}}
+\newcommand{\ArchUniOrdVect}{\prescript{1}{\text{arch}}{\text{OrdVec}}}
+\newcommand{\StarVect}{\prescript{\star}{}{\text{Vec}_{\C}}}
+\newcommand{\OrdStarVect}{\text{Ord}\prescript{\star}{}{\text{Vec}}}
+\newcommand{\UniOrdStarVect}{\prescript{1}{}{\text{Ord}\prescript{\star}{}{\text{Vec}}}}
+\newcommand{\ArchOrdStarVect}{\prescript{}{\text{arch}}{\text{Ord}\prescript{\star}{}{\text{Vec}}}}
+\newcommand{\AOU}{\prescript{1}{\text{arch}}{\text{Ord}\prescript{\star}{}{\text{Vec}}}}
+
 \begin{document}
 
 \title{\huge\sffamily\bfseries An Operator-Algebraic Approach to Self-Testing}
@@ -22,12 +33,85 @@ This introduction serves to explain the background behind these notes, the prere
 
 \subsection{Background}\label{subsec: background}
 
-These notes were taken as a (non-faithful) record of the contents of a seminar entitled An Operator-Algebraic Approach to Self-Testing organized by the Quantum Mathematics group at the University of Haifa. 
+These notes were taken as a (non-faithful) record of the contents of a seminar entitled An Operator-Algebraic Approach to Self-Testing organized by the Quantum Mathematics group at the University of Haifa. These notes consist of a mathematical part which focuses on the theory of operator systems \& operator spaces, while the physics part focuses on developments in quantum information theory.\\ 
+
+[WRITE FURTHER BACKGROUND]
+
+\ 
+
+\textbf{AI Usage Disclosure:} ChatGPT has been used to construct these notes. To be precise, any global editing or formatting issues have been outsourced to AI, while the actual mathematical writing has been done by the scribe. 
 
 \subsection{Prerequisites \& Guidelines}\label{subsec: prereqs and guidelines}
 
+This document is not self-contained and requires significant background. We do not require background in physics and we will go through all of the necessary material. We do require background in operator algebra theory roughly at the level of the first 4 chapters of \cite{murphy2014c}, followed by some familiarity with the first two chapters of \cite{brownozawaCstarAlgFinDimAppr}. Since our approach\footnote{This reflects the approach and attitude of the author, not of the seminar participants.} is categorical, you should also be comfortable with basic category theory; the first 5 chapters of \cite{riehlcatincontext} ought to be sufficient. These are the main texts from which we will reference facts and when there is discrepancy in notation/terminology, we will say it explicitly for your benefit. 
+
+
 \subsection{General Conventions}\label{subsec: general conventions}
 
+We introduce notation, acronyms and specific categories that may be used throughout the thesis.
+
+\vspace{1pt}
+
+\begin{filingbox}[blue!5!black]{\large General Mathematical Notation}{}
+$\K$ denotes either $\R$ or $\C$.\\
+$\F$ denotes any field.\\
+$\N$ denotes the set of natural numbers (excluding $0$)\\
+$\N_0$ is the set of natural numbers including $0$\\
+$\R^+_0$ denotes the set of all non-negative real numbers.\\
+$\R^+$ denotes the set of all positive real numbers.\\
+If $A,B$ are mathematical objects, then $A \defeq B$ means that $A$ is defined to be equal to $B$.\\ 
+If $A,B$ are statements, then $A \defiff B$ means that $A$ is defined to be equivalent to $B$.
+\end{filingbox}
+
+\vspace{1pt}
+
+\begin{filingbox}[blue!5!black]{\large Common Acronyms}{}
+WLOG - Without loss of generality.\\
+TFAE - The following are equivalent.\\ 
+TFSH - The following statements hold.\\
+nbhd - neighborhood.
+\end{filingbox}
+
+\vspace{1pt}
+
+\begin{filingbox}[blue!5!black]{\large Some Categories}{}
+$\Set$ is the category of sets (with functions as morphisms).\\ 
+$\Grp$ is the category of groups (with group homomorphisms as morphisms).\\ 
+$\AbGrp$ is the full subcategory of $\Grp$ consisting of abelian groups.\\
+$\Top$ is the category of topological spaces (with continuous maps as morphisms).\\ 
+$\CompHaus$ is the full subcategory of $\Top$ consisting of compact Hausdorff spaces.\\ 
+$\TopGrp$ is the category of topological groups (with continuous group homomorphisms as morphisms).\\ 
+$\TopAbGrp$ is the full subcategory of $\TopGrp$ consisting of topological abelian groups.\\
+$\LCHGrp$ is the full subcategory of $\TopGrp$ consisting of locally compact Hausdorff groups.\\
+$\CompHausGrp$ is the full subcategory of $\TopGrp$ consisting of compact Hausdorff groups.\\ 
+$\LCHAbGrp$ is the full subcategory of $\TopGrp$ consisting of locally compact Hausdorff groups.\\ 
+$\CHAbGrp$ is the full subcategory of $\TopGrp$ consisting of compact Hausdorff abelian groups.\\
+$\BanSpace{\C}$ is the category of $\C$-Banach spaces (with continuous linear maps as morphisms).\\
+$\CstarAlg$ is the category of $\dual{C}$-algebras (with $\star$-homomorphisms as morphisms).\\
+$\UCstarAlg$ is the subcategory of $\CstarAlg$ consisting of unital $\dual{C}$-algebras \& unital $\star$-homomorphisms.\\
+$\SepCstarAlg$ is the category of separable $\dual{C}$-algebras.\\
+$\BanAlg$ is the category of $\C$-Banach algebras (with continuous algebra homomorphisms as morphisms).\\
+$\UBanAlg$ is the subcategory of $\BanAlg$ consisting of unital Banach algebras and unital morphisms.
+\end{filingbox}
+
+\vspace{1pt}
+
+\begin{filingbox}[blue!5!black]{\large Categorical Notation}{}
+If $\Cs$ is a category and $x$ is an object in $\Cs$, then we denote that by writing $x \in \Cs$.\\If $\Cs$ is a category, then $\Morphisms(\Cs)$ refers to the set\footnote{This will make sense through the notion of a Grothendieck universe, as discussed in \Cref{sec: a word about foundations}.} of all morphisms of $\Cs$.\\ 
+If $\Cs$ is a category and $x,y \in \Cs$, then $\Mor{\Cs}{x}{y}$ is the set of all morphisms from $x$ to $y$.\\ 
+If $\Cs$ is a category and $x \in \Cs$, then $\Aut(x)$ is the set of all isomorphisms with (co)domain $x$.\\ 
+If $\Cs$ is a pointed category, then the zero object will typically be denoted by $0$ unless otherwise stated.
+\end{filingbox}
+
+We also mention that there are several places where we have labeled certain definitions/results with the name of the author. This has only been done just for the sake of clarity about our contributions. In other places where we reprove results or simply extend what is in the literature, we do state that very clearly. Let us also explain \Cref{sec: miscellaneous proofs} a little more. Throughout the thesis, we will have boxes of the following form which appear in the main text but also in proofs:
+\begin{exercise}
+THIS IS A TEST BOX.
+\end{exercise}
+\begin{solution}
+THIS IS A TEST BOX.
+\end{solution}
+
+These are supposed to encode claims whose proofs we do want to include but doing so in the main thesis breaks the flow of the exposition. So, instead, we simply include their statements in the main thesis so that the reader will certainly come across them but we place the proofs in \Cref{sec: miscellaneous proofs}. For electronic usage, the box is hyperlinked, so clicking on ``Claim [Number]'' will lead you to proof of the claim and similarly, clicking on ``Proof [Number]'' will lead you back to the claim. For the reader who prefers to use a printed copy, we will state the page number where the proof can be found.
 
 
 \subfile{Main/Matrix Ordered Spaces/Introduction}
@@ -39,6 +123,14 @@ These notes were taken as a (non-faithful) record of the contents of a seminar e
 \subfile{Main/Tensor Products of Operator Systems/Tensor_Products_of_Operator_Systems_I}
 \subfile{Main/Tensor Products of Operator Systems/Tensor_Products_of_Operator_Systems_II}
 \subfile{Main/Tensor Products of Operator Systems/Tensor_Products_of_Operator_Systems_III}
+
+\newpage 
+\ifPrintSolutionsAtEnd
+    \CallToPrintSolutionstrue
+    \part*{Solutions}
+    \addcontentsline{toc}{section}{Solutions}
+    \printsolutions
+\fi
 
 \newpage
 \nocite{raum-mathinery-2026}

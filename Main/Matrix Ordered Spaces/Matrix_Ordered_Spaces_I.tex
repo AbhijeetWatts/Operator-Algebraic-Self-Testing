@@ -10,4 +10,440 @@
 % unital completely positive maps, together with amplifications and complete
 % order embeddings.
 
+In light of the motivation given above, we begin with the definition of an ordered vector space. These are not the main objects of interest and they were not covered in the seminar. However, a short introduction to them will make certain key ideas apparent and we will be able to deal with the basic theory of operator systems more cleanly. 
+
+\begin{definition}{}{def: preordered vector space and morphisms}
+An preordered vector space is a pair:
+\[(V,V^+),\] 
+consisting of the following data:
+\begin{enumerate}
+    \item $V \in \Vect{\R}$,
+    \item $V^+ \subseteq V$,
+\end{enumerate}
+satisfying the following axioms:
+\begin{enumerate}
+    \item $V^+$ is non-empty\footnote{We will often omit mention of $V^+$ since it is implicitly covered by the notation used for the underlying vector space.}. 
+    \item $\forall x,y \in V^+: x+y \in V^+$.
+    \item $\forall \lambda \in [0,\infty): \forall x \in V^+: \lambda x \in V^+$. 
+\end{enumerate}
+If $V$ and $W$ are ordered vector spaces, a morphism $f: V \to W$ is a $\R$-linear map (for which we use the same notation) such that $f(V^+) \subseteq W^+$; we refer to these as monotone increasing maps.  
+\end{definition}
+
+From this definition, we may immediately define a category. 
+
+\begin{example}{}{exam: category of preordered vector spaces}
+We define a structure\footnote{We use this word when we are trying to define a category but still need to check that what we have is a category.}:
+\[\PreOrdVect,\] 
+consisting of the following data:
+\begin{enumerate}
+    \item The objects are preordered vector spaces. 
+    \item The morphisms are monotone increasing maps, with composition defined as usual.
+\end{enumerate}
+This structure forms a category; it is the category of preordered vector spaces. 
+\end{example}
+
+For the moment, we will mainly be interested in preordered vector spaces arising from $\dual{C}$-algebras. 
+
+\begin{example}{}{exam: preordered vector space arising from a Cstar algebra}
+Let $A \in \CstarAlg$ and let $S \subseteq A$ be a self-adjoint complex subspace. Then, we define:
+\begin{align*}
+\selfadjointpart{S} &\defeq S \cap \selfadjointpart{A},\\ 
+S^+ &\defeq S \cap A^+.
+\end{align*} 
+This leads us to the following claim. 
+\begin{claim}
+$(S,S^+)$ forms a preordered vector space. 
+\end{claim} 
+This follows from standard properties of positivity in a $\dual{C}$-algebra.  
+\end{example}
+
+In fact, any real vector space can be given the structure of a preordered vector space. 
+
+\begin{example}{}{exam: every vector space is a preordered vector space} 
+Let $V \in \Vect{\R}$ and we define:
+\[V^+ \defeq \{0\}.\] 
+This leads us to the following claim. 
+\begin{claim}
+$(V,V^+) \in \PreOrdVect$.
+\end{claim}
+This is clear from the list of axioms. 
+\end{example}
+
+In general, subspaces are preordered, though quotients are a bit more tricky and are covered in the reference mentioned in \Cref{mot: matrix ordered spaces}. At the level of a preorder, nothing actually goes wrong but the trickiness arises when we consider ordered vector spaces. In that case, further conditions on the subspace need to be considered. 
+
+\begin{exercise}\label{ex: subspaces of preordered vector spaces are preordered}Let $V \in \PreOrdVect$ and let $W \subseteq V$ be a subspace. Define: 
+\[W^+ \defeq W \cap V^+.\]  
+Prove that $(W,W^+) \in \PreOrdVect$. After learning \Cref{term: ordered vector space}, return to this exercise and prove that this construction yields an ordered vector space when $V$ is also an ordered vector space. This is proved on Page \pageref{sol: subspaces and quotients of preordered vector spaces are preordered}.
+\end{exercise}
+\begin{solution}\label{sol: subspaces and quotients of preordered vector spaces are preordered}We will prove each statement one-by-one.
+\begin{enumerate}
+    \item Since $W$ contains $0$ and $V^+$ contains $0$, we see that $W^+$ is not empty. If $x,y \in W^+$, then $x+y \in W$ and $x+y \in V^+$ since $x$ and $y$ individually belong to $V^+$. Finally, let $\lambda \in [0,\infty)$ and let $x \in W^+$. Then, $\lambda x \in W$ certainly and $\lambda x \in V^+$ so we're done. 
+    \item Since $V^+$ contains $0$, we see that $(V/W)^+$ contains $0$ as well since $\pi$ is a linear map, so it is non-empty. Next, let $x+W,y+W \in (V/W)^+$. We can choose $x$ and $y$ so that $x,y \in V^+$ and this means that $x+y \in V^+$. So, it follows that $(x+y)+W = (x+W) + (y+W) \in (V/W)^+$. Finally, let $\lambda \in [0,\infty)$ and let $x+W \in (V/W)^+$. We can choose $x \in V^+$ so $\lambda x \in V^+$ and this means that $\lambda x+W \in (V/W)^+$ and we're done. 
+\end{enumerate}
+This completes the proof. In the case where $V$ is an ordered vector space, we proceed as follows:
+\begin{enumerate}
+    \item We need to show that:
+    \[W^+ \cap (-W^+) = \{0\}.\] 
+    Only the inclusion from the left to the right needs to be shown, so let $x \in W^+ \cap (-W^+)$. Then, we see that $x \in V^+$ and $x \in -V^+$ so $x = 0$ and we're done. 
+    \item Let $x+W \in (V/W)^+ \cap (-(V/W)^+)$. Then, we can choose $x$ so that it comes from $V^+$. and the above implies that $x \in V^+ \cap (-V^+)$.  
+\end{enumerate}
+This completes the whole proof. 
+\end{solution}
+
+As you may have guessed, there is a different description of preordered vector spaces which indicates how we can get the correct objects that will be used for our abstract modeling of operator systems later. To motivate this, let us introduce an innocent piece of notation. 
+
+\begin{notation}{}{nota: positive elements in a preordered vector space}
+Let $V \in \PreOrdVect$ and let $x,y \in V$. We define:
+\[x \leq y \defiff y-x \in V^+.\] 
+This defines a relation on $V$.
+\end{notation}
+
+In the next exercise, we will establish the properties of this order. 
+
+\begin{exercise}\label{ex: properties of the order on a preordered vector space}Let $V \in \PreOrdVect$. Then, the relation $\leq$ is a preorder\footnote{Recall that this means it is reflexive and transitive.}.
+\end{exercise}
+\begin{solution}\label{sol: properties of the order on a preordered vector space}We will check each of the properties of a preorder one-by-one:
+\begin{enumerate}
+    \item Let $x,x \in V$. Then, we know that $0 \in V^+$ since $V^+$ is non-empty and scaling any element in it by $0$ produces $0$. So, we see that $x-x = 0 \in V^+$ and this implies that $x \leq x$. 
+    \item Let $x,y,z \in V$ with $x \leq y$ and $y \leq z$. Then, $y-x \in V^+$ and $z-y \in V^+$. This means that $(z-y) + (y-x) = z-x \in V^+$.  
+\end{enumerate}
+This proves the result. 
+\end{solution}
+
+On the other hand, we can start with a real vector space equipped with a preorder satisfying neat compatibility properties with the internal structure of the vector space and this would produce a preordered vector space. 
+
+\begin{exercise}\label{ex: every vector space with a compatible preorder is a preordered vector space}Let $V \in \Vect{\R}$ equipped with a preorder $\leq$ satisfying the following conditions:
+\begin{enumerate}
+    \item $\forall x,y,z \in V: x \leq y \implies x+z \leq y+z$.
+    \item $\forall \lambda \in [0,\infty): \forall x,y \in V: x \leq y \implies \lambda x \leq \lambda y$. 
+\end{enumerate}
+We define:
+\[V^+ \defeq \{x \in V: 0 \leq x\}.\]  
+Then, $(V,V^+) \in \PreOrdVect$. 
+\end{exercise}
+\begin{solution}\label{sol: every vector space with a compatible preorder is a preordered vector space}Since $0 \leq 0$ due to the reflexivity of $\leq$, we see that $0 \in V^+$ so it is non-empty. Next, let $x,y \in V^+$. Then, we see that:
+\[0 \leq y = 0+y \leq x+y,\], 
+which implies, by transitivity, that $x+y \in V^+$. Finally, let $\lambda \in [0,\infty)$ and let $x \in V^+$. Then, we see that:
+\[0 = \lambda \cdot 0 \leq \lambda \cdot x,\] 
+which proves the desired result. 
+\end{solution}
+
+Of course, one can define another category with objects being real vector spaces with compatible preorders and morphisms being order-preserving maps; the results above will show that this category is isomorphic to $\PreOrdVect$, so we may simply pass from one description to another as is convenient for us. Now, we want to restrict to the category of ordered vector spaces (and actually, we will eventually restrict even further than that later) and to motivate the correct definition of such objects, we need the result of the following exercise. 
+
+\begin{exercise}\label{ex: if the underlying relation on a preordered vector space is a partial order then we get the cone condition}Let $V \in \PreOrdVect{\R}$ and let $\leq$ be a partial order. Prove that:
+\[V^+ \cap (-V^+) = \{0\},\] 
+where $-V^+$ is defined in the usual way. 
+\end{exercise}
+\begin{solution}\label{sol: if the underlying relation on a preordered vector space is a partial order then we get the cone condition}Clearly, the right-hand side belongs to the left-hand side so we must show the other inclusion. So, let $x \in V^+ \cap (-V^+)$. This means that $x \leq 0$ and $0 \leq x$ so the antisymmetry of the order implies that $x = 0$. 
+\end{solution}
+
+So, this motivates us to introduce the following terminology. 
+
+\begin{terminology}{}{term: ordered vector space} 
+Let $V \in \PreOrdVect$. $V$ is an ordered vector space iff:
+\[V^+ \cap (-V^+) = \{0\}.\] 
+In this case, we refer to $V^+$ as the positive cone of $V$. 
+\end{terminology}
+
+Of course, we can also define a category of ordered vector spaces. 
+
+\begin{example}{}{exam: category of ordered vector spaces}
+We denote by:
+\[\OrdVect,\] 
+the full subcategory of $\PreOrdVect$ consisting of ordered vector spaces. 
+\end{example}
+
+Morally, a converse of the result of \Cref{ex: if the underlying relation on a preordered vector space is a partial order then we get the cone condition} should hold. 
+
+\begin{exercise}\label{ex: underlying preorder of an ordered vector space is a partial order}Let $V \in \OrdVect$. Prove that the underlying preorder $\leq$ is a partial order. 
+\end{exercise}
+\begin{solution}\label{sol: underlying preorder of an ordered vector space is a partial order}We need to just show that it is antisymmetric; let $x,y \in V$ with $x \leq y$ and $y \leq x$. Then, we see that $y-x \in V^+$ and $x-y = -(y-x) \in V^+$. So, $y-x \in V^+ \cap (-V^+)$. Since this intersection is trivial, we see that $y-x = 0$ so $x = y$. 
+\end{solution}
+
+Of course, it is useful for us to have a relationship between $\OrdVect$ and $\Vect{\R}$. 
+
+\begin{exercise}\label{ex: forgetful functor from OrdVec to Vec has a left adjoint}The forgetful functor $U: \OrdVect \to \Vect{\R}$ has a fully faithful left-adjoint. 
+\end{exercise}
+\begin{solution}\label{sol: forgetful functor from OrdVec to Vec has a left adjoint}We construct the left-adjoint using \Cref{exam: every vector space is a preordered vector space}; we let $F$ denote this to-be-constructed left-adjoint. This takes any real vector space and maps it to the pair of the vector space \& the trivial cone. In that case, every linear map ends up being monotone increasing map. This creates the required natural bijection between hom-sets, so we're done. 
+\end{solution}
+
+As we mentioned above, our goal isn't to study ordered vector spaces but to use them as a tool for studying (unital) operator systems, which we introduce later. Nevertheless, let us note that these are interesting structures that have been extensively studied in the literature and have applications towards spectral theory, interpolation theory and Choquet theory over topological vector spaces. One of the main tools of the theory lies in the following major theorem, which we will not prove but state as a point of education for the reader.
+
+\begin{theorem}{The Hahn-Banach Theorem for Positive Linear Functionals}{thm: Hahn Banach Theorem for Positive linear Functionals}
+Let $V \in \OrdVect$ and let $W \subseteq V$ be a subspace such that:
+\[\forall x \in V: \exists y \in W: x \leq y.\]
+If $\phi \in \Mor{\OrdVect}{W}{\R}$, then there exists a $\Phi \in \Mor{\OrdVect}{V}{\R}$ such that $\Phi|_W = \phi$. 
+\end{theorem}
+\begin{proof}
+See \cite[Theorem 2.3.7, p.68-69]{Salamon}. The proof is a reduction to the usual Hahn-Banach Theorem.
+\end{proof}
+
+To leverage our work here for the study of (unital) operator systems, we will need to introduce the notion of a\footnote{Typically, I (as in, the author of this document) do not like using this word when referring to an identity element. In this case, this is not really an identity element in the conventional sense, so it sorta makes sense to use this bit of terminology.} ``unit''. To see why this is the case, we will introduce it at the level of ordered vector spaces. At the same time, we will introduce another property that will be leveraged quite often when we begin studying operator systems. 
+
+\begin{definition}{}{def: order unit and archimedeanity}
+Let $V \in \OrdVect$. 
+\begin{enumerate}
+    \item An element $e \in V$ is called an order-unit iff:
+    \[\forall x \in V: \exists n \in \N: -ne \leq x \leq ne.\]
+    The last part is sometimes written as $x \in [-ne,ne]$, though we will not use this convention. 
+    \item The order on $V$ is Archimedean iff 
+\end{enumerate}
+In the case of statement $(2)$, we will also sometimes say that the positive cone on $V$ is Archimedean. 
+\end{definition}
+
+We have a remark about this definition. 
+
+\begin{remark}{}{rem: plan for the rest of the subsection}
+These two conditions are different from each other but they are related. Our next goal will be to relate them and this will constitute a rather brief discussion. Once this is done, we will be ready to start introducing the actual objects of interest. Again, there will only be one difficult theorem in this section \& the proof of it will be very similar to something you already know, so it is not that big of a deal. Right now, it is simply important for us to have a clean, conceptual way of thinking about these objects. 
+\end{remark}
+
+With that said, let us start by trying to understand the condition of Archimedeanity. Intuitively, this should be viewed as a kind of ``closure condition''. Let us turn this intuition into an actual proposition by, first, introducing a set of constructions on a vector space that might be familiar from previous work with topological vector spaces. These are typically good constructions to have when trying to find nice subsets of topological vector spaces which facilitate arguments that a norm would normally easily allow. In this case, it turns out that they are useful also for dealing with order-theoretic arguments. 
+
+\begin{construction}{}{const: some constructions on a vector space}
+Let $V \in \Vect{\R}$. 
+\begin{enumerate}
+    \item 
+\end{enumerate}
+The main construction to focus on is the lineal closure. 
+\end{construction}
+
+Now, we can state the main proposition which confirms the intuition that Archimedeanity is a closure property. 
+
+\begin{proposition}{}{prop: characterizations of Archimedeanity}
+Let $V \in \OrdVect$. 
+\begin{enumerate}
+    \item The ordering on $V$ is Archimedean. 
+    \item If $x,y \in V$ and $x \leq \lambda y$ for all $\lambda \in (0,\infty)$, then $x \leq 0$. 
+    \item  If $x,y \in V$ and $x \leq \lambda y$ for all $\lambda \in (0,\epsilon)$ for some $\epsilon > 0$, then $x \leq 0$. 
+    \item If $x,y \in V$ and $\alpha \in \R$ and we have that:
+    \[\exists \epsilon > 0: \forall \lambda \in (0,\epsilon): x \leq (\alpha+\lambda)y,\]     
+    then $x \leq \alpha y$.  
+    \item $V^+_c$ is lineally closed. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The proof is very simple. 
+\begin{enumerate}
+    \item
+\end{enumerate}
+\end{proof}
+
+Now, the relationship with order-units is very simple. 
+
+\begin{proposition}{}{prop: order units provide a nice and simple characterization of Archimedeanity}
+Let $V \in \OrdVect$ and let $e$ be an order-unit on $V$. TFAE: 
+\begin{enumerate}
+    \item $V$ is Archimedean. 
+    \item If $x \in V$ and $x \leq \lambda e$ for each $\lambda \in (0,\infty)$, then $x \leq 0$. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\end{proof}
+
+Obviously, order-units are not unique and this is why they're not really analogous to identities on algebras. So, when we pick an order-unit, it is extra data and not part of the structure of an ordered vector space. This motivates the following two pieces of terminology. 
+
+\begin{terminology}{}{term: unital ordered vector space}
+A unital ordered vector space is a pair:
+\[(V,1_V),\]
+where $V \in \OrdVect$ and $1_V \in V$ is an order-unit\footnote{Due to our choice of notation, the order-unit can be suppressed whenever we talk about a unital ordered vector space.}.
+\end{terminology}
+
+\begin{terminology}{}{term: unital monotone map}
+Let $V,W$ be unital ordered vector spaces. A unital morphism $f: V \to W$ is simply a morphism of ordered vector spaces which preserves the respective order-units. 
+\end{terminology}
+
+Of course, we may now introduce a category. 
+
+\begin{example}{}{exam: category of unital ordered vector spaces}
+We define a structure: 
+\[\UniOrdVect,\]    
+consisting of the following data: 
+\begin{enumerate}
+    \item The objects are unital ordered vector spaces. 
+    \item The morphisms are unital monotone morphisms, with composition being defined as usual. 
+\end{enumerate}
+This structure produces a category; it is the category of unital ordered vector spaces. 
+\end{example}
+
+It is natural, then, for one to pose the following question. 
+
+\begin{Question}{}{que: do unitizations exist for ordered vector spaces}
+Does the forgetful functor $U: \UniOrdVect \to \OrdVect$ admit a left adjoint\footnote{In other words, is there a unitization functor?}?
+\end{Question}
+\begin{Answer}{}{ans: do unitizations exist for ordered vector spaces}
+It seems that this isn't the case and it also seems to be a difficult problem from the viewpoint of modern research to construct something like a unitization functor. Even when equipped with extra topological structure and nice compatibilities, the problem seems to be very difficult. 
+\end{Answer}
+
+We have a further remark about this question and its answer. 
+
+\begin{remark}{}{rem: restriction to unital case is fundamental}
+This somehow makes it clear that the restriction to unital operator systems is fundamental; it is not formal and cannot be dealt away with simply by adjoining a order-unit. This is related to questions that will arise in our discussion of tensor products of operator systems, which only seem to have been handled in the unital case. 
+\end{remark}
+
+At this stage, we are finally ready to start discussing the actual contents of the seminar. Again, we emphasize that our prelude above was only meant to present the material we will now proceed towards in a clean and conceptual fashion. The starting point is the definition of a $\star$-vector space. Actually, we will present this as terminology simply to emphasize that it is not the main structure of interest. Interestingly, we will now turn our attention towards complex vector spaces. 
+
+\begin{terminology}{}{term: star vector space and star linear maps}
+A $\star$-vector space is a pair: 
+\[(V,\star),\]    
+consisting of:
+\begin{enumerate}
+    \item $V \in \Vect{\C}$.
+    \item An antilinear map $\star: V \to V$ such that: 
+    \[\forall x \in V: \dual{(\dual{x})} = x.\]    
+    Over here, we have that $\dual{x} \defeq \star(x)$ for each $x \in V$. We refer to this as an involution\footnote{We will usually suppress this from the notation and simply reference the underlying vector space.}. 
+\end{enumerate}
+If $V$ and $W$ are $\star$-vector spaces, then a morphism $f: V \to W$ is a $\C$-linear map such that: 
+\[\forall x \in V: f(\dual{x}) = \dual{f(x)}.\]    
+We refer to this as a $\star$-linear map and say that $f$ preserves adjoints. 
+\end{terminology}
+
+Of course, any $\star$-algebra is going to be a $\star$-vector space but we also get many examples from function spaces that are not $\star$-algebras in a natural way (for instance, $L^p$-spaces). We will present more examples later. Now, we may form a category of $\star$-vector spaces. 
+
+\begin{example}{}{exam: category of star vector spaces}
+We define a structure:
+\[\StarVect,\]    
+consisting of the following data: 
+\begin{enumerate}
+    \item The objects are $\star$-vector spaces. 
+    \item The morphisms are $\star$-linear maps, with composition being defined as usual. 
+\end{enumerate}
+This produces a category; this is the category of $\star$-vector spaces. 
+\end{example}
+
+This example prompts a question. 
+
+\begin{Question}{}{que: does the forgetful functor from star vector spaces to vector spaces have a left adjoint}
+Does the forgetful functor $U: \StarVect \to \Vect{\C}$ have a left adjoint?
+\end{Question}
+\begin{Answer}{}{ans: does the forgetful functor from star vector spaces to vector spaces have a left adjoint}
+In the case of $\Alg_{\C}$, we know that this is not the case; one may find an example of a $\C$-algebra which cannot admit an (algebra) involution in \cite[Example 2.5, p.9]{Schmudgen}. However, the argument presented there does not seem to admit an immediate generalization.  
+\end{Answer}
+
+With the involution, we may introduce some notation. 
+
+\begin{notation}{}{nota: self adjoint elements in a star vector space}
+Let $V \in \StarVect$ and let $x \in V$. We say that $x$ is self-adjoint or Hermitian iff: 
+\[x = \dual{x}.\]    
+The set of self-adjoint elements in $V$ is denoted by $\selfadjointpart{V}$ or $V_h$. 
+\end{notation}
+
+Of course, this is a functorial construction, as the next two exercises demonstrate. 
+
+\begin{exercise}\label{ex: self adjoint part of a star vector space is a real vector space}Let $V \in \StarVect$. Prove that $\selfadjointpart{V} \in \Vect{\R}$. 
+\end{exercise}
+\begin{solution}\label{sol: self adjoint part of a star vector space is a real vector space}This is clear, because the involution is an $\R$-linear map. Of course, $0$ is self-adjoint, which we now show quickly. Observe that:
+\[\forall x \in V: x+\dual{0} = \dual{(\dual{x}+0)} = \dual{(\dual{x})} = x.\]
+This implies that $\dual{0}$ is an identity for addition in $V$ and since identities are unique, we see that $0$ is self-adjoint.    
+\end{solution}
+
+\begin{exercise}\label{ex: functor from a star vector space to selfadjoint elements}We define a map of categories: 
+\[F: \StarVect \to \Vect{\R},\]    
+as follows: 
+\begin{enumerate}
+    \item If $V \in \StarVect$, then $F(V) = \selfadjointpart{V}$. 
+    \item If $V,W \in \StarVect$ and $f \in \Mor{\StarVect}{V}{W}$, then we define $F(f) = f|_{\selfadjointpart{V}}$. 
+\end{enumerate}
+Prove that this is a well-defined functor. 
+\end{exercise}
+\begin{solution}\label{sol: functor from a star vector space to selfadjoint elements}Let us first show that this is well-defined. Indeed, we need to show that $F(f)$ is a well-defined $\R$-linear map. This is just a computation: 
+\begin{align*}
+\forall x \in \selfadjointpart{V}: \dual{f(x)} &= f(\dual{x})\\ 
+                                               &= f(x).
+\end{align*}
+So, $f$ maps into $\selfadjointpart{W}$. The fact that it is an $\R$-linear map follows from the fact that real numbers are fixed under complex conjugation.
+\end{solution}
+
+It might be reasonably clear now that when we eventually incorporate an order structure into a $\star$-vector space, it will appear at the level of its self-adjoint elements.  Now, an important general construction is the so-called matrix amplification. 
+
+\begin{construction}{}{const: matrix amplification of a star vector space}
+Let $m,n \in \N$ and let $V \in \StarVect$. We define a $\star$-vector space:
+\[\Mat{m}{n}{V},\]  
+as follows:
+\begin{enumerate}
+    \item We equip this with its entry-wise addition and scalar multiplication so it becomes a $\C$-vector space.   
+    \item If $a = (a_{ij}) \in \Mat{m}{n}{V}$, then we define:   
+    \[(\dual{a})_{ij} \defeq (\dual{a}_{ji}).\]
+    A small computation\footnote{Do it!} reveals that this is an involution on $\Mat{m}{n}{V}$. 
+\end{enumerate}
+This is the $\star$-vector space of $m \times n$ matrices over $V$. 
+
+\noindent\rule{8cm}{0.4pt}
+
+The next goal is to define a functor: 
+\[\Mat{m}{n}{-}: \StarVect \to \StarVect,\]    
+and to do this, we have to specify what happens at the level of the morphisms. So, let $V,W \in \StarVect$ and let $f \in \Mor{\StarVect}{V}{W}$. Then, we define a morphism: 
+\[\Mat{m}{n}{f}: \Mat{m}{n}{V} \to \Mat{m}{n}{W} \ , \ (a_{ij}) \mapsto \Mat{m}{n}{f}(a_{ij}) \defeq (f(a_{ij})),\]   
+In other words, we apply $f$ entry-wise. A simple calculation\footnote{Do it!} reveals that $\Mat{m}{n}{f}$ is a $\star$-linear map. So, this forms a map of categories\footnote{This is the terminology we use before we check that some data forms a functor.} and another calculation reveals that this is a functor. We refer to this as the matrix amplification functor.
+\end{construction}
+
+We have a remark about this construction. 
+
+\begin{remark}{}{rem: purpose of matrix amplification construction}
+As you might have guessed, \Cref{const: matrix amplification of a star vector space} will be important because we will eventually use it to define a notion of \emph{complete positivity} in this setting. In other words, the structures of interest to us are precisely those for which this remains a robust notion. These are the so-called abstract operator systems and the main punchline result of the next subsection will be that these are just the concrete operator systems.
+\end{remark}
+
+So far, we have introduce (pre)-ordered vector spaces (along with further data and structures on them) and we have introduced $\star$-vector spaces. It is time for us to put them together, as we do in the following definition. 
+
+\begin{definition}{}{def: ordered star vector spaces and their morphisms}
+An ordered $\star$-vector space is a pair: 
+\[(V,V^+),\]    
+consisting of the following data: 
+\begin{enumerate}
+    \item $V \in \StarVect$,  
+    \item $(\selfadjointpart{V},V^+) \in \OrdVect$. In this case, we will let $\leq$ denote the underlying order\footnote{Again, we may suppress $V^+$ from the notation as it does not add any new information.}.  
+\end{enumerate}
+If $V$ and $W$ are ordered $\star$-vector spaces, then a morphism $f: V \to W$ is simply a morphism of the underlying $\star$-vector spaces which restricts to a morphism of the underlying ordered vector spaces. 
+\end{definition}
+
+Of course, we may use this to define another category but before we do that, it is best if we incorporate our previous discussion of order-units and Archimideanity almost immediately into the picture. Once this is done, we can define several categories all at once, thus giving a cleaner view of structures that we will need later. 
+
+\begin{terminology}{}{term: archmideanity and order units for ordered star vector spaces}
+Let $V$ be an ordered $\star$-vector space. 
+\begin{enumerate}
+    \item An element $e \in \selfadjointpart{V}$ is an order-unit iff $(\selfadjointpart{V},V^+,e) \in \UniOrdVect$.   
+    \item $V$ is unital iff $\selfadjointpart{V}$ has an order-unit. 
+    \item $V$ is Archimedean iff $(\selfadjointpart{V},V^+) \in \ArchOrdVect$.  
+    \item $V$ is an AOU\footnote{This stands for Archimedean order-unit.} iff it is Archimedean and has an order unit.  
+\end{enumerate}
+Let $V$ be unital. We define the set of states of $V$: 
+\[\States(V),\]
+to be the set of all $\star$-linear maps $f: V \to \C$ which preserve the cone of $\selfadjointpart{V}$ and preserve the order-unit. 
+\end{terminology}
+
+In the next example, we present various categories. 
+\begin{example}{}{exam: various categories of ordered star structures}
+In the following list, we will define several categories: 
+\begin{enumerate}
+    \item $\OrdStarVect$ denotes the category of ordered $\star$-vector spaces with $\star$-linear maps as morphisms. 
+    \item $\UniOrdStarVect$ denotes the category of unital ordered $\star$-vector spaces with morphisms being $\star$-linear maps which restrict to unital morphisms of the underlying ordered vector spaces. 
+    \item $\ArchOrdStarVect$ is the full subcategory of $\OrdStarVect$ consisting of Archimedean ordered $\star$-vector spaces. 
+    \item $\AOU$ is the full subcategory of $\UniOrdStarVect$ consisting of AOU ordered $\star$-vector spaces.
+\end{enumerate}
+The verification that these are, indeed, categories is a nice algebraic exercise and we leave it to the reader. 
+\end{example}
+
+If the goal is to define a structure which supports morphisms that satisfy the property of complete positivity, then we need to ensure that matrix amplifications also inherit some ordered structure. To that end, we finally introduce matrix ordered $\star$-vector spaces. 
+
+\begin{definition}{}{def: matrix ordered star vector spaces and their morphisms}
+Let $V \in \StarVect$. A matrix ordering on $V$ is a sequence $\tau = \left(\Mat{n}{n}{V}^+\right)_{n \in \N}$ of sets such that\footnote{In the second condition, we note that the left and right actions of $\Mat{n}{n}{\C}$ on $\Mat{n}{n}{V}$ are defined in the obvious manner. Moreover, our notation is suggestive but if we have two matrix orderings on the same vector space, then we will use more general notation (for instance, letting $\Mat{n}{n}{V}^+$ be denoted by $C_n$). In all cases, there will be no ambiguity whatsoever.}: 
+\begin{enumerate}
+    \item For each $n \in \N$, we have that $(\Mat{n}{n}{V},\Mat{n}{n}{V}^+) \in \OrdStarVect$. 
+    \item $\forall n,m \in \N: \forall X \in \Mat{n}{m}{\C}: \dual{X}C_n X \subseteq C_m$. 
+\end{enumerate}
+A matrix ordered ($\star$-vector) space is, then, a pair: 
+\[(V,(\Mat{n}{n}{V}^+)_{n \in \N}),\] 
+consisting of the following data\footnote{Due to our choice of notation, we may just suppress the matrix ordering.}: 
+\begin{enumerate}
+    \item $V \in \OrdStarVect$, 
+    \item a matrix ordering $\left(\Mat{n}{n}{V}^+\right)_{n \in \N}$ on $V$.
+\end{enumerate}  
+If $V$ and $W$ are matrix ordered spaces, then a morphism $f: V \to W$ is a $\star$-linear map between the underlying $\star$-vector spaces such that for each $n \in \N$, the map $\Mat{n}{n}{f}$ is a morphism of ordered $\star$-vector spaces. We refer to such morphisms as being completely positive. 
+\end{definition}
+
+We have a remark about this definition.  
+
+\begin{remark}{}{rem: condition two of the definition of a matrix ordering is natural}
+Condition $(2)$ of the definition of a matrix ordering is natural and basically allows us to reduce positivity questions for large matrices to smaller ones (where positivity can ostensibly be verified more easily). 
+\end{remark}
+
 \end{document}
